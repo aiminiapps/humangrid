@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+/* === Luxury Industrial Design System === */
+
+@layer utilities {
+
+  /* Neon glow effects */
+  .text-glow {
+    text-shadow: 0 0 20px rgba(198, 255, 26, 0.6), 0 0 40px rgba(198, 255, 26, 0.3);
+  }
+
+  .text-glow-soft {
+    text-shadow: 0 0 10px rgba(198, 255, 26, 0.4);
+  }
+
+  .border-glow {
+    box-shadow: 0 0 20px rgba(198, 255, 26, 0.3), inset 0 0 10px rgba(198, 255, 26, 0.1);
+  }
+
+  /* Glass morphism effect */
+  .glass-effect {
+    background: rgba(22, 28, 25, 0.6);
+    backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(198, 255, 26, 0.12);
+  }
+
+  .glass-elevated {
+    background: rgba(28, 35, 32, 0.7);
+    backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(198, 255, 26, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(198, 255, 26, 0.08);
+  }
+
+  /* Premium card effect */
+  .card-luxury {
+    background: linear-gradient(135deg, rgba(22, 28, 25, 0.8) 0%, rgba(28, 35, 32, 0.6) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(198, 255, 26, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card-luxury:hover {
+    border-color: rgba(198, 255, 26, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(198, 255, 26, 0.15);
+    transform: translateY(-2px);
+  }
+
+  /* Mesh gradient background */
+  .mesh-bg {
+    background-image:
+      radial-gradient(at 40% 20%, rgba(198, 255, 26, 0.05) 0%, transparent 50%),
+      radial-gradient(at 80% 0%, rgba(198, 255, 26, 0.03) 0%, transparent 50%),
+      radial-gradient(at 0% 50%, rgba(198, 255, 26, 0.02) 0%, transparent 50%);
+  }
+}
+
+/* === Global Styles === */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #0B0F0C;
+  color: #E6F1EA;
+  overflow-x: hidden;
+}
+
+/* === Premium Scrollbar === */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #111714;
+  border-left: 1px solid #222A26;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #2A332E 0%, #222A26 100%);
+  border-radius: 5px;
+  border: 2px solid #111714;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #C6FF1A 0%, #7FB800 100%);
+  box-shadow: 0 0 10px rgba(198, 255, 26, 0.5);
+}
+
+/* === Selection === */
+::selection {
+  background-color: rgba(198, 255, 26, 0.3);
+  color: #E6F1EA;
+}
+
+::-moz-selection {
+  background-color: rgba(198, 255, 26, 0.3);
+  color: #E6F1EA;
+}
+
+/* === Loading States === */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  animation: shimmer 2.5s infinite linear;
+  background: linear-gradient(to right,
+      #161C19 4%,
+      #1C2320 25%,
+      #161C19 36%);
+  background-size: 1000px 100%;
+}
+
+/* === Focus States === */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid #C6FF1A;
+  outline-offset: 2px;
+}
+
+/* === Transitions === */
+a,
+button {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
