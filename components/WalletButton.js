@@ -1,20 +1,14 @@
 'use client'
 
-import { useAccount, useSignMessage, useDisconnect } from 'wagmi'
+import { useAccount, useDisconnect } from 'wagmi'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
     RiWalletLine, RiLogoutBoxLine, RiShieldCheckLine,
-    RiLoader4Line, RiFileCopyLine, RiCheckLine,
+    RiFileCopyLine, RiCheckLine,
     RiExternalLinkLine, RiAlertLine,
 } from 'react-icons/ri'
-import {
-    generateNonce,
-    createSignInMessage,
-    SessionManager,
-    AuthState,
-} from '@/lib/auth'
 
 // ─── Truncate address ─────────────────────────────────────────────────────────
 function truncAddr(addr) {
@@ -35,25 +29,11 @@ function WalletButtonContent() {
     const { open } = useWeb3Modal()
     const { address, isConnected, chain } = useAccount()
     const { disconnect } = useDisconnect()
-    const { signMessageAsync } = useSignMessage()
 
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
-    const [isAuthenticating, setIsAuthenticating] = useState(false)
     const [showChainWarning, setShowChainWarning] = useState(false)
     const [showDropdown, setShowDropdown] = useState(false)
     const [copied, setCopied] = useState(false)
     const dropdownRef = useRef(null)
-
-    // Auth status
-    useEffect(() => {
-        if (address) {
-            const s = AuthState.getAuthStatus(address)
-            setIsAuthenticated(s.isAuthenticated)
-            if (s.isAuthenticated) SessionManager.refreshSession()
-        } else {
-            setIsAuthenticated(false)
-        }
-    }, [address])
 
     // Chain check
     useEffect(() => {
@@ -75,27 +55,7 @@ function WalletButtonContent() {
         return () => document.removeEventListener('mousedown', handler)
     }, [])
 
-    const handleAuthenticate = async () => {
-        if (!address || isAuthenticating) return
-        setIsAuthenticating(true)
-        try {
-            const nonce = generateNonce()
-            const message = createSignInMessage(address, nonce)
-            const signature = await signMessageAsync({ message })
-            if (signature) {
-                SessionManager.saveSession(address, signature, nonce)
-                setIsAuthenticated(true)
-            }
-        } catch (err) {
-            console.error('Auth failed:', err)
-        } finally {
-            setIsAuthenticating(false)
-        }
-    }
-
     const handleDisconnect = () => {
-        SessionManager.clearSession()
-        setIsAuthenticated(false)
         disconnect()
         setShowDropdown(false)
     }
@@ -132,32 +92,7 @@ function WalletButtonContent() {
         )
     }
 
-    // ── Connected but not authenticated ────────────────────────────────────────
-    if (!isAuthenticated) {
-        return (
-            <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={handleAuthenticate}
-                disabled={isAuthenticating}
-                className="flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-bold text-sm border transition-all"
-                style={{
-                    color: '#FBBF24',
-                    borderColor: 'rgba(251,191,36,0.35)',
-                    background: 'rgba(251,191,36,0.08)',
-                    boxShadow: '0 0 16px rgba(251,191,36,0.1)',
-                }}
-            >
-                {isAuthenticating ? (
-                    <><RiLoader4Line className="text-base animate-spin" /><span>Signing…</span></>
-                ) : (
-                    <><RiShieldCheckLine className="text-base" /><span>Sign to Verify</span></>
-                )}
-            </motion.button>
-        )
-    }
-
-    // ── Authenticated — show address + dropdown ────────────────────────────────
+    // ── Connected — show address + dropdown ────────────────────────────────
     return (
         <div className="relative" ref={dropdownRef}>
             {/* Main pill */}
@@ -209,7 +144,7 @@ function WalletButtonContent() {
                         <div className="px-4 pt-4 pb-3 border-b border-white/6">
                             <div className="flex items-center gap-2 mb-1">
                                 <RiShieldCheckLine className="text-[#C6FF1A] text-sm" />
-                                <span className="text-[#C6FF1A] text-xs font-bold uppercase tracking-wider">Verified</span>
+                                <span className="text-[#C6FF1A] text-xs font-bold uppercase tracking-wider">Connected</span>
                             </div>
                             <div className="font-mono text-white/70 text-xs break-all leading-relaxed">
                                 {address}

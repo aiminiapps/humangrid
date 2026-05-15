@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id                  String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  wallet_address      String       @unique
+  reputation_score    Int?         @default(0)
+  level               Int?         @default(1)
+  total_contributions Int?         @default(0)
+  total_rewards       Decimal?     @default(0) @db.Decimal(20, 2)
+  created_at          DateTime?    @default(now()) @db.Timestamptz(6)
+  updated_at          DateTime?    @default(now()) @db.Timestamptz(6)
+  
+  submissions         Submission[]
+  rewards             Reward[]
+
+  @@map("users")
+}
+
+model Task {
+  id          String       @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  task_type   String
+  title       String
+  description String
+  options     Json?
+  difficulty  String       
+  base_reward Decimal      @db.Decimal(20, 2)
+  min_level   Int?         @default(1)
+  created_at  DateTime?    @default(now()) @db.Timestamptz(6)
+  
+  submissions Submission[]
+
+  @@map("tasks")
+}
+
+model Submission {
+  id            String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  user_id       String?   @db.Uuid
+  task_id       String?   @db.Uuid
+  answer        Json
+  reward_amount Decimal   @db.Decimal(20, 2)
+  status        String?   @default("pending")
+  created_at    DateTime? @default(now()) @db.Timestamptz(6)
+  
+  user          User?     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  task          Task?     @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  rewards       Reward[]
+
+  @@map("submissions")
+}
+
+model Reward {
+  id            String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  user_id       String?     @db.Uuid
+  submission_id String?     @db.Uuid
+  amount        Decimal     @db.Decimal(20, 2)
+  tx_hash       String?
+  status        String?     @default("pending")
+  created_at    DateTime?   @default(now()) @db.Timestamptz(6)
+  confirmed_at  DateTime?   @db.Timestamptz(6)
+  
+  user          User?       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  submission    Submission? @relation(fields: [submission_id], references: [id], onDelete: SetNull)
+
+  @@map("rewards")
+}
