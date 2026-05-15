@@ -1,191 +1,176 @@
 'use client'
 
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useRef, useState, useEffect } from 'react'
-import {
-    RiArrowRightLine,
-    RiShieldStarLine, RiCheckLine, RiGlobalLine,
-    RiBarChartLine, RiTokenSwapLine,
-} from 'react-icons/ri'
+import { RiArrowRightLine, RiShieldStarLine, RiCheckLine, RiGlobalLine } from 'react-icons/ri'
+import Grainient from './ui/Grainient'
 
-// ─── Animated count ───────────────────────────────────────────────────────────
-function CountUp({ target, prefix = '', suffix = '' }) {
-    const [val, setVal] = useState(0)
-    const ref = useRef(null)
-    const [fired, setFired] = useState(false)
+// ─── Animation Configurations ─────────────────────────────────────────────────
+const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: { staggerChildren: 0.15, delayChildren: 0.1 }
+    }
+}
 
-    useEffect(() => {
-        const io = new IntersectionObserver(([e]) => {
-            if (e.isIntersecting && !fired) {
-                setFired(true)
-                let n = 0
-                const inc = target / 50
-                const t = setInterval(() => {
-                    n += inc
-                    if (n >= target) { setVal(target); clearInterval(t) }
-                    else setVal(Math.floor(n))
-                }, 20)
-            }
-        }, { threshold: 0.5 })
-        if (ref.current) io.observe(ref.current)
-        return () => io.disconnect()
-    }, [target, fired])
-
-    return <span ref={ref}>{prefix}{val.toLocaleString()}{suffix}</span>
+const itemVariants = {
+    hidden: { opacity: 0, y: 30, filter: 'blur(8px)' },
+    show: { 
+        opacity: 1, 
+        y: 0, 
+        filter: 'blur(0px)', 
+        transition: { type: "spring", stiffness: 45, damping: 15 } 
+    }
 }
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 export default function HeroSection() {
     const router = useRouter()
-    const sectionRef = useRef(null)
-    const { scrollY } = useScroll()
-    const y = useTransform(scrollY, [0, 500], [0, 80])
-    const opacity = useTransform(scrollY, [0, 350], [1, 0])
-
-    const stats = [
-        { icon: RiGlobalLine, color: '#FF7100', prefix: '', val: 10, suffix: 'K+', label: 'Contributors' },
-        { icon: RiTokenSwapLine, color: '#3B82F6', prefix: '$', val: 250, suffix: 'K+', label: 'SYNTR Paid' },
-        { icon: RiBarChartLine, color: '#8B5CF6', prefix: '', val: 1, suffix: 'M+', label: 'Tasks Done' },
-        { icon: RiCheckLine, color: '#10B981', prefix: '', val: 99, suffix: '%', label: 'Uptime' },
-    ]
 
     return (
-        <section
-            ref={sectionRef}
-            className="relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 pt-28 pb-20 overflow-hidden bg-[#FAFAFA]"
-        >
-            {/* ── Ultra-premium Light Background ── */}
+        <section className="relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-8 pt-32 pb-24 overflow-hidden bg-[#FAFAFC]">
+            
+            {/* ── Creative & Dynamic Light Background ── */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-                {/* Subtle dot grid for structural, high-end feel */}
+                {/* Architectural Grid */}
                 <div 
-                    className="absolute inset-0" 
+                    className="absolute inset-0 opacity-[0.3]" 
                     style={{ 
-                        backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.05) 1px, transparent 0)',
-                        backgroundSize: '32px 32px' 
+                        backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px)',
+                        backgroundSize: '48px 48px' 
                     }} 
                 />
                 
-                {/* Refined soft ambient light (no bad gradients, just a smooth vignette) */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-white opacity-80 rounded-full blur-[100px]" />
+                {/* Drifting Ambient Orbs */}
+                <motion.div 
+                    animate={{ 
+                        x: ['-10%', '10%', '-10%'], 
+                        y: ['-5%', '5%', '-5%'] 
+                    }}
+                    transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute top-[5%] left-[30%] w-[60vw] h-[50vw] max-w-[800px] bg-slate-300/30 blur-[120px] rounded-full mix-blend-multiply" 
+                />
+                <motion.div 
+                    animate={{ 
+                        x: ['10%', '-10%', '10%'], 
+                        y: ['5%', '-5%', '5%'] 
+                    }}
+                    transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute top-[20%] right-[20%] w-[50vw] h-[40vw] max-w-[600px] bg-[#FF7100]/5 blur-[140px] rounded-full mix-blend-multiply" 
+                />
+                
+                {/* High-End Grain Overlay */}
+                <div className="absolute inset-0 opacity-40 mix-blend-multiply">
+                    <Grainient
+                        color1="#FAFAFC"
+                        color2="#FFF5F0"
+                        color3="#FAFAFC"
+                        timeSpeed={0.1}
+                        colorBalance={0}
+                        warpStrength={0.3}
+                        warpFrequency={3}
+                        warpSpeed={1}
+                        warpAmplitude={20}
+                        blendAngle={0}
+                        blendSoftness={0.1}
+                        rotationAmount={300}
+                        noiseScale={1.5}
+                        grainAmount={0.04}
+                        grainScale={1.2}
+                        grainAnimated={true}
+                        contrast={1.1}
+                        gamma={1}
+                        saturation={0.4}
+                        centerX={0}
+                        centerY={0}
+                        zoom={1}
+                    />
+                </div>
             </div>
 
-            {/* ── All text content — z-10 ── */}
+            {/* ── Orchestrated Text & UI Content ── */}
             <motion.div
-                style={{ y, opacity }}
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
                 className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center"
             >
-                {/* Headline */}
-                <motion.div
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.65, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                    className="text-center mb-8"
-                >
+                {/* Elevated Typography Headline */}
+                <motion.div variants={itemVariants} className="text-center mb-10 w-full">
                     <h1
-                        className="font-extrabold text-zinc-900 leading-[1.05] tracking-tight"
-                        style={{ fontSize: 'clamp(3rem, 8vw, 5.5rem)' }}
+                        className="font-extrabold leading-[0.95] tracking-tighter"
+                        style={{ fontSize: 'clamp(3.5rem, 8vw, 7.5rem)' }}
                     >
-                        Train AI Systems,
+                        <span className="text-slate-900 drop-shadow-sm">
+                            Train AI Systems
+                        </span>
                         <br />
-                        <span className="relative inline-block mt-1 sm:mt-3">
-                            <span className="relative z-10 text-zinc-900">Earn Crypto Rewards</span>
-                            {/* Tasteful orange gradient highlight */}
-                            <span 
-                                className="absolute bottom-2 sm:bottom-4 left-0 w-full h-3 sm:h-5 -rotate-1 rounded-sm z-0" 
-                                style={{ 
-                                    background: 'linear-gradient(90deg, rgba(255,113,0,0.25), rgba(230,74,0,0.4))',
-                                    transformOrigin: 'bottom left' 
-                                }} 
-                            />
+                        <span className="relative inline-block mt-2">
+                            <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-[#FF7100] via-[#FF913B] to-[#FF7100] italic pr-4 font-bold tracking-tight">
+                                Earn Crypto
+                            </span>
                         </span>
                     </h1>
                     <p
-                        className="text-slate-500 mt-8 text-balance leading-relaxed mx-auto max-w-2xl"
-                        style={{ fontSize: 'clamp(1rem, 1.5vw, 1.15rem)' }}
+                        className="mt-8 text-slate-500 text-balance font-normal leading-relaxed mx-auto max-w-2xl"
+                        style={{ fontSize: 'clamp(1.1rem, 1.2vw, 1.25rem)' }}
                     >
-                        Complete precision micro-tasks that improve AI models.
-                        Get paid in <span className="text-zinc-800 font-semibold">HGAI tokens</span> directly
-                        to your BNB Chain wallet no middlemen, no delays.
+                        Complete precision micro-tasks that refine intelligence models. 
+                        Receive <span className="text-slate-900 font-semibold">HGAI tokens</span> instantly to your BNB Chain wallet. No friction.
                     </p>
                 </motion.div>
 
-                {/* CTA row */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.55, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                    className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14 w-full sm:w-auto"
-                >
-                    {/* Highly detailed, creative, effective CTA button */}
+                {/* Premium Liquid Glass CTA */}
+                <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-24 w-full sm:w-auto">
                     <motion.button
                         whileHover={{ scale: 1.02, y: -2 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => router.push('/ai')}
-                        className="relative flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold text-sm overflow-hidden group transition-all w-full sm:w-auto"
+                        className="relative flex items-center justify-center gap-3 px-8 py-4 rounded-full font-semibold text-[15px] overflow-hidden group transition-all w-full sm:w-auto shadow-[0_12px_30px_-10px_rgba(255,113,0,0.4)] hover:shadow-[0_20px_40px_-12px_rgba(255,113,0,0.5)]"
                         style={{ 
-                            background: 'linear-gradient(135deg, #FF7100 0%, #E64A00 100%)', 
+                            background: 'linear-gradient(135deg, #FF7100 0%, #D95A00 100%)', 
                             color: '#FFFFFF', 
-                            boxShadow: '0 14px 32px -8px rgba(255, 90, 0, 0.4), inset 0 2px 2px rgba(255,255,255,0.25), inset 0 -2px 4px rgba(0,0,0,0.1)',
-                            border: '1px solid rgba(255,100,0,0.8)'
+                            boxShadow: 'inset 0 1.5px 2px rgba(255,255,255,0.4), inset 0 -2px 6px rgba(0,0,0,0.15)',
+                            border: '1px solid #E65C00'
                         }}
                     >
-                        {/* Shimmer effect */}
+                        {/* Elegant Sweep Shimmer */}
                         <span 
-                            className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" 
-                            style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)' }} 
+                            className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-[1.2s] ease-in-out" 
+                            style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)' }} 
                         />
-                        {/* Soft inner radial gradient for 3D effect */}
-                        <span 
-                            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" 
-                            style={{ background: 'radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%)' }} 
-                        />
+                        
                         <Image 
                             src="/icon.png" 
                             alt="icon" 
-                            width={20} 
-                            height={20} 
-                            className="relative z-10 shrink-0 filter invert opacity-95 group-hover:opacity-100 transition-opacity" 
+                            width={18} 
+                            height={18} 
+                            className="relative z-10 shrink-0 filter invert opacity-95 group-hover:opacity-100 transition-opacity duration-300" 
                         />
-                        <span className="relative z-10 tracking-wide font-bold text-[15px] drop-shadow-sm">Launch Dashboard</span>
+                        <span className="relative z-10 tracking-wide drop-shadow-sm">Launch Dashboard</span>
                         <RiArrowRightLine className="text-sm relative z-10 group-hover:translate-x-1 transition-transform duration-300 opacity-90 group-hover:opacity-100" />
-                    </motion.button>
-
-                    {/* Secondary refined button */}
-                    <motion.button
-                        whileHover={{ scale: 1.02, backgroundColor: '#F8FAFC' }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
-                        className="flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-semibold text-[15px] transition-all duration-300 w-full sm:w-auto"
-                        style={{
-                            color: '#475569',
-                            border: '1px solid #E2E8F0',
-                            background: '#FFFFFF',
-                            boxShadow: '0 2px 8px -2px rgba(0,0,0,0.04)'
-                        }}
-                    >
-                        See How It Works
                     </motion.button>
                 </motion.div>
 
-                {/* Trust badges */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.6, delay: 0.4 }}
-                    className="flex flex-wrap items-center justify-center gap-4 mt-2"
-                >
-                    {[
-                        { icon: RiShieldStarLine, label: 'Non-custodial', color: '#10B981' },
-                        { icon: RiCheckLine, label: 'Audited Contracts', color: '#3B82F6' },
-                        { icon: RiGlobalLine, label: 'BNB Chain Native', color: '#F59E0B' },
-                    ].map(({ icon: Icon, label, color }) => (
-                        <div key={label} className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow duration-300 cursor-default">
-                            <Icon style={{ color }} className="text-base shrink-0" />
-                            <span className="text-slate-600 text-[13px] font-semibold tracking-wide">{label}</span>
-                        </div>
-                    ))}
+                {/* Milky Glass Trust Metrics */}
+                <motion.div variants={itemVariants} className="flex items-center justify-center w-full max-w-2xl">
+                    <div className="flex flex-wrap items-center justify-center gap-6 w-full border-t border-slate-200/80 pt-8 relative">
+                        {/* Subtle highlight line on the border */}
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-[1px] bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
+                        
+                        {[
+                            { icon: RiShieldStarLine, label: 'Non-custodial' },
+                            { icon: RiCheckLine, label: 'Audited Contracts' },
+                            { icon: RiGlobalLine, label: 'BNB Chain Native' },
+                        ].map((item) => (
+                            <div key={item.label} className="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white/70 backdrop-blur-xl border border-white shadow-[0_2px_15px_-5px_rgba(0,0,0,0.05)] group transition-all duration-300 hover:bg-white">
+                                <item.icon className="text-slate-400 text-lg group-hover:text-[#FF7100] transition-colors duration-500" />
+                                <span className="text-slate-600 text-xs tracking-wider uppercase font-bold">{item.label}</span>
+                            </div>
+                        ))}
+                    </div>
                 </motion.div>
             </motion.div>
         </section>
