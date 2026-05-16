@@ -12,11 +12,15 @@ import {
 function SectionHeading() {
     return (
         <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mt-4 mb-4 tracking-tight leading-[1.1]">
-                Smarter Workflows to <br /> Boost Your Earnings
+            <div className="inline-block px-3 py-1 mb-4 rounded-full bg-[#FF7100]/10 border border-[#FF7100]/20 text-[#FF7100] text-xs font-bold tracking-wide uppercase">
+                HumanGrid AI
+            </div>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mt-2 mb-4 tracking-tight leading-[1.1]">
+                Decentralized AI Training <br /> Data Platform
             </h2>
-            <p className="text-slate-500 mt-5 text-lg max-w-xl mx-auto leading-relaxed">
-                Everything you need to train AI models, manage tasks, and earn crypto effortlessly.
+            <p className="text-slate-500 mt-5 text-lg max-w-2xl mx-auto leading-relaxed">
+                Join the community-powered AI data labeling, verification, and reward ecosystem. 
+                Complete micro-tasks and earn <span className="font-bold text-slate-800">HGAI</span> natively.
             </p>
         </div>
     )
@@ -30,22 +34,29 @@ function Card({ color, title, desc, children, delay = 0, isHighlight = false }) 
     return (
         <motion.div
             ref={ref}
-            initial={{ opacity: 0, y: 36 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
-            className={`relative rounded-3xl flex flex-col p-5 sm:p-6 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
-                isHighlight ? 'bg-white shadow-[0_12px_40px_-10px_rgba(255,113,0,0.15)]' : 'bg-white shadow-[0_8px_30px_-12px_rgba(0,0,0,0.08)]'
+            initial={{ opacity: 0, y: 40, scale: 0.96, filter: 'blur(8px)' }}
+            animate={inView ? { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' } : {}}
+            transition={{ duration: 0.8, delay, type: "spring", stiffness: 70, damping: 20 }}
+            className={`group relative rounded-3xl flex flex-col p-5 sm:p-6 overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(255,113,0,0.25)] bg-white ${
+                isHighlight ? 'shadow-[0_12px_40px_-10px_rgba(255,113,0,0.15)]' : 'shadow-[0_8px_30px_-12px_rgba(0,0,0,0.08)]'
             }`}
             style={{
                 border: isHighlight ? '2px solid rgba(255,113,0,0.15)' : '1px solid rgba(0,0,0,0.04)',
             }}
         >
-            {isHighlight && (
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#FF7100]/[0.03] to-transparent pointer-events-none" />
-            )}
+            {/* Orange gradient background */}
+            <div 
+                className="absolute inset-0 w-full h-full pointer-events-none z-0 transition-opacity duration-500 opacity-60 group-hover:opacity-100"
+                style={{ background: 'linear-gradient(180deg, rgba(255,113,0,0.15) 0%, rgba(255,113,0,0.02) 50%, transparent 100%)' }}
+            />
+            {/* Noise grain effect */}
+            <div 
+                className="absolute inset-0 w-full h-full pointer-events-none z-0 mix-blend-overlay opacity-50 group-hover:opacity-80 transition-opacity duration-500"
+                style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.25'/%3E%3C/svg%3E")` }}
+            />
 
             {/* Animated illustration area */}
-            <div className="mb-6 flex-1 rounded-2xl overflow-hidden bg-[#FAFAFC] relative flex items-center justify-center p-4 sm:p-6"
+            <div className="mb-6 flex-1 rounded-2xl overflow-hidden bg-[#FAFAFC] relative flex items-center justify-center p-4 sm:p-6 shadow-inner z-10"
                 style={{ minHeight: 260, border: '1px solid rgba(0,0,0,0.03)' }}>
                 {children}
             </div>
@@ -331,7 +342,6 @@ function EarnCard() {
                             {balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </motion.span>
                     </div>
-                    <div className="text-[10px] font-semibold text-slate-400 mt-1">≈ ${(balance * 0.42).toLocaleString('en-US', {minimumFractionDigits: 2})} USD</div>
                 </div>
 
                 <div className="h-px w-full bg-slate-100" />
@@ -364,31 +374,31 @@ export default function HowItWorks() {
         {
             step: 1,
             title: 'Secure Authentication',
-            desc: 'Connect your BNB Chain wallet instantly. No KYC required, maintaining full anonymity and security.',
+            desc: 'Connect your BNB Chain wallet instantly. Enter the HumanGrid AI Data Network securely and anonymously.',
             delay: 0,
             isHighlight: true,
             children: <WalletCard />,
         },
         {
             step: 2,
-            title: 'Precision AI Tasks',
-            desc: 'Label datasets, validate AI logic, and provide essential feedback to refine intelligence models.',
+            title: 'Label-to-Earn Tasks',
+            desc: 'Provide community-powered AI data labeling and verification. Refine models through our decentralized platform.',
             delay: 0.1,
             isHighlight: false,
             children: <TaskCard />,
         },
         {
             step: 3,
-            title: 'Pipeline Tracking',
-            desc: 'Monitor your task progression across different datasets. Watch your daily accuracy and output scale.',
+            title: 'Data Pipeline Tracking',
+            desc: 'Monitor your data contributions across the platform in real-time. Watch your verification output scale.',
             delay: 0.2,
             isHighlight: false,
             children: <PipelineCard />,
         },
         {
             step: 4,
-            title: 'Instant Rewards',
-            desc: 'Earn HGAI tokens for every approved task. Payouts are directly sent to your wallet with zero friction.',
+            title: 'Instant HGAI Rewards',
+            desc: 'Our reward ecosystem pays HGAI directly to your wallet for every approved labeling task. Zero friction.',
             delay: 0.3,
             isHighlight: false,
             children: <EarnCard />,
