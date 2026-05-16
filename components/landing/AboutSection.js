@@ -38,17 +38,8 @@ export default function AboutSection() {
         <section
             id="about"
             ref={ref}
-            className="relative px-4 sm:px-6 py-24 overflow-hidden bg-[#FAFAFC]"
+            className="relative px-4 sm:px-6 py-16 overflow-hidden bg-[#FAFAFC]"
         >
-            {/* Subtle background architectural grid */}
-            <div 
-                className="absolute inset-0 opacity-[0.4] pointer-events-none" 
-                style={{ 
-                    backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0.02) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px)',
-                    backgroundSize: '64px 64px' 
-                }} 
-            />
-
             <motion.div 
                 variants={containerVars}
                 initial="hidden"
@@ -57,17 +48,10 @@ export default function AboutSection() {
             >
                 {/* ── Main Ecosystem Block (Left) ── */}
                 <motion.div variants={itemVars} className="md:col-span-2 lg:col-span-5 lg:row-span-2 rounded-[2.5rem] bg-white p-8 sm:p-12 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.06)] border border-slate-100 flex flex-col justify-between group overflow-hidden relative transition-all duration-500 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)]">
-                    {/* Subtle glow in corner */}
-                    <div className="absolute -top-24 -left-24 w-64 h-64 bg-[#FF7100]/5 rounded-full blur-3xl group-hover:bg-[#FF7100]/10 transition-colors duration-700" />
-                    
                     <div className="relative z-10">
-                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 mb-8 rounded-full bg-[#FF7100]/10 text-[#FF7100] text-xs font-bold tracking-wide uppercase border border-[#FF7100]/20">
-                            <RiNodeTree className="text-sm" />
-                            HumanGrid AI Ecosystem
-                        </div>
-                        <h2 className="text-4xl lg:text-5xl font-extrabold text-slate-900 leading-[1.08] tracking-tight mb-6">
-                            Human Input. <br/>
-                            <span className="text-[#FF7100]">Machine Precision.</span>
+                        <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 leading-[1.08] tracking-tight mb-6">
+                            Human Input <br/>
+                            <span className="text-[#FF7100]">Machine Precision</span>
                         </h2>
                         <p className="text-slate-500 text-[17px] leading-relaxed">
                             We bridge the gap between human validators and decentralized intelligence networks. 
@@ -78,12 +62,12 @@ export default function AboutSection() {
                     <div className="flex gap-8 mt-12 border-t border-slate-100 pt-8 relative z-10">
                         <div>
                             <div className="text-4xl font-black text-slate-900 tracking-tighter">&lt;60s</div>
-                            <div className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-2">Avg Task Time</div>
+                            <div className="text-slate-400 text-[10px] font-semibold mt-2">Avg Task Time</div>
                         </div>
                         <div className="w-px h-12 bg-slate-100" />
                         <div>
                             <div className="text-4xl font-black text-slate-900 tracking-tighter">100%</div>
-                            <div className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-2">On-Chain</div>
+                            <div className="text-slate-400 text-[10px] font-semibold mt-2">On-Chain</div>
                         </div>
                     </div>
                 </motion.div>
@@ -97,7 +81,7 @@ export default function AboutSection() {
                         </div>
                         <h3 className="text-2xl font-bold text-slate-900 mb-3 tracking-tight">Discover Micro-Tasks</h3>
                         <p className="text-slate-500 text-[16px] max-w-lg leading-relaxed">
-                            Our engine instantly matches your profile with high-value AI labeling tasks—ranging from sentiment analysis to complex model logic validation.
+                            Our engine instantly matches your profile with high value AI labeling tasks ranging from sentiment analysis to complex model logic validation.
                         </p>
                     </div>
                 </motion.div>
@@ -130,7 +114,7 @@ export default function AboutSection() {
                         </div>
                         <h3 className="text-[19px] font-bold text-white mb-2 tracking-tight">Earn HGAI</h3>
                         <p className="text-white/90 text-[15px] leading-relaxed font-medium">
-                            Rewards land on-chain instantly. Zero intermediaries.
+                            Rewards land on-chain instantly, Zero intermediaries.
                         </p>
                     </div>
                 </motion.div>
