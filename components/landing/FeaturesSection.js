@@ -1,304 +1,199 @@
 'use client'
 
-import { motion, useInView, AnimatePresence } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { motion, useInView } from 'framer-motion'
+import Image from 'next/image'
+import { useRef } from 'react'
 import {
     RiBrainLine, RiShieldCheckLine,
     RiTrophyLine, RiCheckLine,
     RiStarLine, RiCpuLine,
     RiDatabase2Line, RiImageLine, RiFileTextLine,
-    RiKey2Line, RiNodeTree
+    RiNodeTree, RiArrowRightUpLine, RiTimeLine, RiLineChartLine, RiLockPasswordLine, RiKey2Line
 } from 'react-icons/ri'
 
-// ─── Floating particle ───────────────────────────────────────
-function Particle({ color, delay, x, size = 3 }) {
-    return (
-        <motion.div
-            className="absolute rounded-full pointer-events-none"
-            style={{ width: size, height: size, background: color, left: `${x}%`, bottom: -6 }}
-            animate={{ y: [0, -55, -70], opacity: [0, 0.7, 0], scale: [1, 1.2, 0.4] }}
-            transition={{ duration: 2.2, delay, repeat: Infinity, ease: 'easeOut' }}
-        />
-    )
-}
-
-// ─── Card shell ───────────────────────────────────────────────
-function BentoCard({ className = '', style = {}, color = '#FF7100', label, title, children, delay = 0 }) {
+// ─── Refined Card Shell ───────────────────────────────────────────────
+function BentoCard({ className = '', color = '#FF7100', label, title, children, delay = 0 }) {
     const ref = useRef(null)
-    const inView = useInView(ref, { once: true, margin: '-60px' })
+    const inView = useInView(ref, { once: true, margin: '-40px' })
 
     return (
         <motion.div
             ref={ref}
-            initial={{ opacity: 0, y: 30, scale: 0.96 }}
-            animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-            transition={{ duration: 0.7, delay, type: 'spring', stiffness: 70, damping: 20 }}
-            className={`relative rounded-[2rem] overflow-hidden flex flex-col group bg-white shadow-[0_8px_30px_-12px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] transition-all duration-500 border border-slate-100 ${className}`}
-            style={style}
+            initial={{ opacity: 0, y: 40 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] }}
+            className={`relative rounded-[2rem] overflow-hidden flex flex-col group bg-white border border-slate-200/60 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.03)] hover:shadow-[0_24px_40px_-12px_rgba(0,0,0,0.08)] transition-all duration-700 ${className}`}
         >
-            {/* Subtle corner glow on hover */}
-            <div className="absolute top-0 right-0 w-32 h-32 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none blur-3xl rounded-full"
-                style={{ background: color, opacity: 0.05 }} />
-
-            <div className="px-6 pt-6 pb-4 shrink-0 relative z-10">
-                <div className="flex items-center gap-2 mb-2">
-                    <span className="text-sm font-semibold" style={{ color: color }}>{label}</span>
+            {/* Elegant glass shimmer on hover */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none bg-gradient-to-b from-white/40 to-transparent z-20" />
+            
+            <div className="px-8 pt-8 pb-5 shrink-0 relative z-10 border-b border-slate-50/50">
+                <div className="flex items-center gap-2 mb-3">
+                    <span className="text-xs font-semibold text-slate-500" style={{color: color }}>{label}</span>
                 </div>
-                <h3 className="text-xl font-semibold text-slate-900 leading-snug tracking-tight">{title}</h3>
+                <h3 className="text-2xl font-semibold text-slate-900 leading-tight tracking-tight">{title}</h3>
             </div>
 
-            <div className="flex-1 px-6 pb-6 min-h-0 overflow-hidden relative z-10">{children}</div>
+            <div className="flex-1 px-8 pb-8 pt-2 min-h-0 relative z-10 bg-slate-50/30">{children}</div>
         </motion.div>
     )
 }
 
 // ══════════════════════════════════════════════════════════════
-// CELL A — AI Task Matching
+// CELL A — AI Task Matching (Content Heavy Data Table)
 // ══════════════════════════════════════════════════════════════
-const TASK_TYPES = [
-    { icon: RiFileTextLine, label: 'Text Labeling', score: 94, color: '#FF7100' },
-    { icon: RiImageLine, label: 'Image Review', score: 88, color: '#3B82F6' },
-    { icon: RiDatabase2Line, label: 'Data Ranking', score: 91, color: '#8B5CF6' },
-    { icon: RiCpuLine, label: 'Model Validation', score: 85, color: '#10B981' },
+const ACTIVE_TASKS = [
+    { icon: RiFileTextLine, title: 'LLM Response Grading', type: 'NLP Model', difficulty: 'Expert', reward: '120 HGAI', time: '5m', color: '#FF7100' },
+    { icon: RiImageLine, title: 'Spatial Bounding Boxes', type: 'Computer Vision', difficulty: 'Intermediate', reward: '45 HGAI', time: '2m', color: '#3B82F6' },
+    { icon: RiDatabase2Line, title: 'Sentiment Alignment', type: 'Data Structuring', difficulty: 'Beginner', reward: '15 HGAI', time: '1m', color: '#8B5CF6' },
+    { icon: RiCpuLine, title: 'Logic Validation Check', type: 'Reasoning AI', difficulty: 'Advanced', reward: '250 HGAI', time: '15m', color: '#10B981' },
 ]
 
 function AIMatchingCell() {
-    const [active, setActive] = useState(0)
-    const [score, setScore] = useState(0)
-    const [scanning, setScanning] = useState(false)
-
-    useEffect(() => {
-        let cancelled = false
-        const run = async () => {
-            while (!cancelled) {
-                setScanning(true)
-                setScore(0)
-                await new Promise(r => setTimeout(r, 400))
-                const target = TASK_TYPES[active % TASK_TYPES.length].score
-                const interval = setInterval(() => {
-                    setScore(prev => Math.min(prev + 3, target))
-                }, 28)
-                await new Promise(r => setTimeout(r, 1100))
-                clearInterval(interval)
-                setScore(target)
-                setScanning(false)
-                await new Promise(r => setTimeout(r, 1200))
-                if (!cancelled) setActive(a => (a + 1) % TASK_TYPES.length)
-            }
-        }
-        run()
-        return () => { cancelled = true }
-    }, [active])
-
-    const current = TASK_TYPES[active]
-
     return (
-        <div className="flex flex-col gap-4 select-none mt-2">
-            {/* Active scanner */}
-            <div className="rounded-2xl p-4 relative overflow-hidden transition-colors duration-500"
-                style={{ background: `${current.color}0A`, border: `1px solid ${current.color}20` }}>
-                <AnimatePresence>
-                    {scanning && (
-                        <motion.div
-                            key="sweep"
-                            initial={{ x: '-100%' }}
-                            animate={{ x: '300%' }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.8, ease: 'linear' }}
-                            className="absolute inset-y-0 w-1/2 pointer-events-none"
-                            style={{ background: `linear-gradient(90deg, transparent, ${current.color}15, transparent)` }}
-                        />
-                    )}
-                </AnimatePresence>
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-white shadow-sm border border-slate-100">
-                            <current.icon style={{ color: current.color }} className="text-xl" />
+        <div className="flex flex-col gap-3 mt-4 w-full">
+            <div className="grid grid-cols-12 gap-4 px-4 pb-2 text-[10px] font-bold tracking-widest uppercase text-slate-400 border-b border-slate-200/60">
+                <div className="col-span-6 md:col-span-5">Available Task</div>
+                <div className="col-span-3 hidden md:block">Requirements</div>
+                <div className="col-span-6 md:col-span-4 text-right">Yield Target</div>
+            </div>
+
+            {ACTIVE_TASKS.map((task, i) => (
+                <motion.div
+                    key={task.title}
+                    whileHover={{ x: 4, backgroundColor: '#FFFFFF', borderColor: 'rgba(0,0,0,0.05)' }}
+                    transition={{ duration: 0.2 }}
+                    className="grid grid-cols-12 gap-4 items-center p-4 rounded-2xl border border-transparent cursor-pointer group"
+                >
+                    <div className="col-span-6 md:col-span-5 flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-white border border-slate-100 shadow-sm group-hover:scale-105 transition-transform duration-300">
+                            <task.icon style={{ color: task.color }} className="text-lg" />
                         </div>
                         <div>
-                            <div className="text-slate-800 text-sm font-bold">{current.label}</div>
-                            <div className="text-slate-400 text-[11px] font-medium">{scanning ? 'Analyzing dataset...' : 'Perfect Match Found'}</div>
+                            <div className="text-slate-900 text-sm font-bold tracking-tight">{task.title}</div>
+                            <div className="text-slate-500 text-[11px] font-medium mt-0.5">{task.type}</div>
                         </div>
                     </div>
-                    <div className="text-right">
-                        <div className="text-2xl font-black leading-none" style={{ color: current.color }}>{score}%</div>
-                        <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">Accuracy</div>
+                    
+                    <div className="col-span-3 hidden md:flex items-center">
+                        <span className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-600 text-[11px] font-semibold">
+                            {task.difficulty}
+                        </span>
                     </div>
-                </div>
-                {/* Score bar */}
-                <div className="mt-4 h-2 rounded-full overflow-hidden bg-slate-100">
-                    <motion.div
-                        className="h-full rounded-full"
-                        animate={{ width: `${score}%` }}
-                        transition={{ ease: 'linear', duration: 0.05 }}
-                        style={{ background: `linear-gradient(90deg, ${current.color}80, ${current.color})` }}
-                    />
-                </div>
-            </div>
 
-            {/* Queue */}
-            <div className="flex flex-col gap-2">
-                {TASK_TYPES.map((t, i) => {
-                    const isActive = i === active
-                    return (
-                        <motion.div
-                            key={t.label}
-                            animate={{ opacity: isActive ? 1 : 0.4, x: isActive ? 4 : 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="flex items-center justify-between px-3 py-2.5 rounded-xl border"
-                            style={{
-                                background: isActive ? '#FFFFFF' : 'transparent',
-                                borderColor: isActive ? 'rgba(0,0,0,0.05)' : 'transparent',
-                                boxShadow: isActive ? '0 2px 8px -2px rgba(0,0,0,0.05)' : 'none'
-                            }}
-                        >
-                            <div className="flex items-center gap-3">
-                                <t.icon className="text-sm shrink-0" style={{ color: t.color }} />
-                                <span className="text-[13px] font-semibold text-slate-600">{t.label}</span>
+                    <div className="col-span-6 md:col-span-4 flex items-center justify-end gap-4">
+                        <div className="text-right">
+                            <div className="text-slate-900 text-sm font-bold">{task.reward}</div>
+                            <div className="text-slate-400 text-[11px] flex items-center justify-end gap-1 mt-0.5">
+                                <RiTimeLine /> {task.time}
                             </div>
-                            <motion.div
-                                animate={isActive ? { opacity: [0.4, 1, 0.4], scale: [0.8, 1, 0.8] } : { opacity: 1, scale: 1 }}
-                                transition={{ duration: 1.4, repeat: Infinity }}
-                                className="w-2 h-2 rounded-full"
-                                style={{ background: isActive ? t.color : '#E2E8F0' }}
-                            />
-                        </motion.div>
-                    )
-                })}
-            </div>
-        </div>
-    )
-}
-
-// ══════════════════════════════════════════════════════════════
-// CELL B — Reputation (tall)
-// ══════════════════════════════════════════════════════════════
-const RANKS = [
-    { name: 'Novice', color: '#94A3B8', xpMax: 500, mult: '1.0x', icon: RiStarLine },
-    { name: 'Validator', color: '#3B82F6', xpMax: 1200, mult: '1.5x', icon: RiCheckLine },
-    { name: 'Expert', color: '#8B5CF6', xpMax: 3000, mult: '2.0x', icon: RiBrainLine },
-    { name: 'Master', color: '#FF7100', xpMax: 6000, mult: '3.0x', icon: RiTrophyLine },
-]
-const RANK_XP = [380, 950, 2200, 4100]
-
-function ReputationCell() {
-    const [ri, setRi] = useState(0)
-    const [xp, setXp] = useState(0)
-    const [sparks, setSparks] = useState(false)
-
-    useEffect(() => {
-        let cancelled = false
-        const run = async () => {
-            while (!cancelled) {
-                const target = RANK_XP[ri]
-                const start = Date.now()
-                const dur = 1800
-                await new Promise(res => {
-                    const raf = () => {
-                        const p = Math.min((Date.now() - start) / dur, 1)
-                        setXp(Math.round(p * target))
-                        if (p < 1 && !cancelled) requestAnimationFrame(raf)
-                        else res()
-                    }
-                    requestAnimationFrame(raf)
-                })
-                if (cancelled) break
-                setSparks(true)
-                await new Promise(r => setTimeout(r, 1600))
-                setSparks(false)
-                await new Promise(r => setTimeout(r, 300))
-                if (!cancelled) setRi(i => (i + 1) % RANKS.length)
-                setXp(0)
-            }
-        }
-        run()
-        return () => { cancelled = true }
-    }, [ri])
-
-    const rank = RANKS[ri]
-    const pct = (xp / rank.xpMax) * 100
-
-    return (
-        <div className="flex flex-col gap-5 select-none h-full mt-2">
-            {/* Rank badge */}
-            <div className="relative flex flex-col items-center py-6 rounded-2xl overflow-hidden transition-colors duration-500"
-                style={{ background: `${rank.color}08`, border: `1px solid ${rank.color}15` }}>
-                
-                {sparks && [15, 30, 50, 70, 85].map((x, i) => (
-                    <Particle key={i} color={rank.color} delay={i * 0.1} x={x} size={4} />
-                ))}
-
-                <motion.div
-                    key={`badge-${ri}`}
-                    initial={{ scale: 0.5, opacity: 0, rotate: -20 }}
-                    animate={{ scale: 1, opacity: 1, rotate: 0 }}
-                    transition={{ type: 'spring', stiffness: 250, damping: 20 }}
-                    className="w-20 h-20 rounded-3xl flex items-center justify-center mb-4 relative bg-white shadow-sm border border-slate-100"
-                >
-                    <rank.icon style={{ color: rank.color }} className="text-4xl" />
-                    {sparks && (
-                        <motion.div
-                            animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.6, 0] }}
-                            transition={{ duration: 0.6 }}
-                            className="absolute inset-0 rounded-3xl"
-                            style={{ background: rank.color, opacity: 0 }}
-                        />
-                    )}
-                </motion.div>
-
-                <AnimatePresence mode="popLayout">
-                    <motion.div
-                        key={`name-${ri}`}
-                        initial={{ y: 15, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: -10, opacity: 0 }}
-                        className="text-2xl font-black tracking-tight" style={{ color: rank.color }}>
-                        {rank.name}
-                    </motion.div>
-                </AnimatePresence>
-                <div className="text-slate-400 text-[11px] font-bold uppercase tracking-widest mt-1.5">Network Rank</div>
-            </div>
-
-            {/* XP */}
-            <div>
-                <div className="flex justify-between mb-2 px-1">
-                    <span className="text-slate-400 text-[11px] font-bold uppercase tracking-widest">Experience</span>
-                    <motion.span key={xp} className="text-[12px] font-black" style={{ color: rank.color }}>
-                        {xp.toLocaleString()} XP
-                    </motion.span>
-                </div>
-                <div className="h-3 rounded-full overflow-hidden relative bg-slate-100">
-                    <motion.div className="h-full rounded-full relative"
-                        style={{ background: `linear-gradient(90deg, ${rank.color}90, ${rank.color})` }}
-                        animate={{ width: `${Math.min(pct, 100)}%` }}
-                        transition={{ ease: 'linear', duration: 0.05 }}
-                    >
-                        <motion.div
-                            className="absolute inset-0"
-                            animate={{ x: ['-100%', '200%'] }}
-                            transition={{ duration: 1.5, repeat: Infinity, ease: 'linear', repeatDelay: 0.5 }}
-                            style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)' }}
-                        />
-                    </motion.div>
-                </div>
-                <div className="flex justify-between mt-1.5 px-1">
-                    <span className="text-slate-300 text-[10px] font-semibold">0</span>
-                    <span className="text-slate-300 text-[10px] font-semibold">{rank.xpMax.toLocaleString()} XP</span>
-                </div>
-            </div>
-
-            {/* Multiplier */}
-            <div className="grid grid-cols-2 gap-3 mt-auto">
-                <div className="rounded-2xl p-4 text-center border transition-colors duration-500"
-                    style={{ background: `${rank.color}05`, borderColor: `${rank.color}20` }}>
-                    <div className="text-3xl font-black tracking-tighter" style={{ color: rank.color }}>{rank.mult}</div>
-                    <div className="text-[10px] text-slate-400 mt-1 font-bold uppercase tracking-widest">HGAI Bonus</div>
-                </div>
-                <div className="rounded-2xl p-4 text-center bg-slate-50 border border-slate-100">
-                    <div className="text-3xl font-black tracking-tighter text-slate-700">
-                        {Math.round(100 - pct)}<span className="text-lg text-slate-400">%</span>
+                        </div>
+                        <RiArrowRightUpLine className="text-slate-300 group-hover:text-slate-600 transition-colors" />
                     </div>
-                    <div className="text-[10px] text-slate-400 mt-1 font-bold uppercase tracking-widest">To Next Rank</div>
+                </motion.div>
+            ))}
+        </div>
+    )
+}
+
+// ══════════════════════════════════════════════════════════════
+// CELL B — Reputation (Premium Level-Up Dashboard)
+// ══════════════════════════════════════════════════════════════
+function ReputationCell() {
+    return (
+        <div className="flex flex-col h-full mt-4">
+            {/* Immersive Profile Status Area */}
+            <div className="relative flex flex-col items-center justify-center p-8 rounded-3xl bg-gradient-to-b from-[#8B5CF6]/[0.08] to-transparent border border-[#8B5CF6]/15 mb-6 overflow-hidden group">
+                {/* Subtle background glow on hover */}
+                <div className="absolute inset-0 bg-[#8B5CF6]/5 blur-3xl group-hover:bg-[#8B5CF6]/10 transition-colors duration-700" />
+                
+                <motion.div 
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
+                    className="relative z-10 w-20 h-20 rounded-full bg-white shadow-[0_8px_30px_-10px_rgba(139,92,246,0.25)] border border-slate-100 flex items-center justify-center mb-5"
+                >
+                    <Image src="/icon.png" alt="Human Grid" width={80} height={80} className="rounded-2xl" />
+                </motion.div>
+                
+                <div className="relative z-10 text-center">
+                    <div className="text-[#8B5CF6] text-[10px] mb-1.5">Current Status</div>
+                    <div className="text-slate-900 text-2xl font-semibold">Expert Validator</div>
+                </div>
+            </div>
+
+            {/* Elevated Multiplier Highlight */}
+            <motion.div 
+                whileHover={{ y: -2 }}
+                className="flex items-center justify-between p-5 rounded-2xl bg-white border border-slate-200/80 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.04)] mb-8 transition-all duration-300 hover:shadow-[0_8px_20px_-8px_rgba(139,92,246,0.15)] hover:border-[#8B5CF6]/30 cursor-default"
+            >
+                <div>
+                    <div className="text-slate-400 text-[10px] font-semibold mb-1">Active Yield Multiplier</div>
+                    <div className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#8B5CF6] to-[#6D28D9]">
+                        2.50<span className="text-lg text-[#8B5CF6]/60 font-medium ml-0.5">x</span>
+                    </div>
+                </div>
+                <div className="h-12 w-12 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100">
+                    <RiArrowRightUpLine className="text-[#8B5CF6] text-xl" />
+                </div>
+            </motion.div>
+
+            {/* Segmented Level-Up Progression */}
+            <div className="mb-6">
+                <div className="flex justify-between items-end mb-3">
+                    <span className="text-slate-500 text-xs font-semibold">Next: <span className="text-slate-900 font-bold">Master (3.0x)</span></span>
+                    <span className="text-[#8B5CF6] text-xs font-black tracking-wide">84%</span>
+                </div>
+                
+                {/* Premium Segmented Bar */}
+                <div className="flex gap-1 h-2.5">
+                    {[1, 2, 3, 4, 5].map((segment) => (
+                        <div key={segment} className="flex-1 rounded-full bg-slate-200/60 overflow-hidden relative">
+                            {segment <= 4 && (
+                                <motion.div 
+                                    initial={{ width: 0 }}
+                                    whileInView={{ width: '100%' }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.6, delay: segment * 0.1, ease: "easeOut" }}
+                                    className="h-full bg-gradient-to-r from-[#8B5CF6] to-[#6D28D9]" 
+                                />
+                            )}
+                            {segment === 5 && (
+                                <motion.div 
+                                    initial={{ width: 0 }}
+                                    whileInView={{ width: '20%' }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+                                    className="h-full bg-gradient-to-r from-[#8B5CF6] to-[#6D28D9]" 
+                                />
+                            )}
+                        </div>
+                    ))}
+                </div>
+                <div className="text-right text-slate-400 text-[10px] font-semibold mt-2.5 tracking-wide">1,550 XP to unlock</div>
+            </div>
+
+            {/* Visual Unlock Path */}
+            <div className="mt-auto pt-5 flex items-center justify-between border-t border-slate-200/80">
+                <div className="text-slate-400 text-[10px] font-semibold">Unlock Path</div>
+                <div className="flex gap-2">
+                    {[
+                        { icon: RiCheckLine, active: true, title: "Validator" },
+                        { icon: RiStarLine, active: true, title: "Expert" },
+                        { icon: RiTrophyLine, active: false, title: "Master" },
+                    ].map((badge, i) => (
+                        <div 
+                            key={i} 
+                            title={badge.title}
+                            className={`w-9 h-9 rounded-full flex items-center justify-center border transition-all duration-300
+                                ${badge.active 
+                                    ? 'bg-white border-slate-200 text-slate-700 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)]' 
+                                    : 'bg-slate-50/50 border-transparent text-slate-300 opacity-60'}`}
+                        >
+                            <badge.icon className="text-[15px]" />
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
@@ -306,149 +201,78 @@ function ReputationCell() {
 }
 
 // ══════════════════════════════════════════════════════════════
-// CELL C — On-Chain Speed
+// CELL C — On-Chain Speed (Static Analytical Dashboard)
 // ══════════════════════════════════════════════════════════════
 function SpeedCell() {
-    const [ms, setMs] = useState(312)
-    const [history, setHistory] = useState([280, 320, 295, 310, 288, 305, 312])
-    const [blocks, setBlocks] = useState([
-        { id: 'a', num: 9182641, ms: 312 },
-        { id: 'b', num: 9182640, ms: 298 },
-    ])
-
-    useEffect(() => {
-        const t = setInterval(() => {
-            const newMs = 265 + Math.floor(Math.random() * 90)
-            setMs(newMs)
-            setHistory(h => [...h.slice(-6), newMs])
-            setBlocks(prev => [
-                { id: Date.now().toString(), num: prev[0].num + 1, ms: newMs },
-                ...prev.slice(0, 2),
-            ])
-        }, 1800)
-        return () => clearInterval(t)
-    }, [])
-
-    const maxH = Math.max(...history)
-    const minH = Math.min(...history)
+    // Abstract representation of stable, fast block times
+    const bars = [60, 80, 45, 90, 65, 85, 40, 75, 50, 95, 70, 80]
 
     return (
-        <div className="flex flex-col gap-4 select-none h-full mt-2">
-            <div className="flex items-end gap-2">
-                <motion.span
-                    key={ms}
-                    initial={{ y: -8, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                    className="text-4xl font-black tracking-tighter text-slate-800"
-                >{ms}</motion.span>
-                <div className="mb-1">
-                    <div className="text-slate-400 text-sm font-bold leading-none">ms</div>
-                    <div className="text-slate-400 text-[10px] leading-none mt-1 font-semibold uppercase tracking-wider">avg finality</div>
+        <div className="flex flex-col h-full mt-4">
+            <div className="flex items-end justify-between mb-8">
+                <div>
+                    <div className="text-4xl font-black tracking-tighter text-slate-900">312<span className="text-xl text-slate-400 font-medium">ms</span></div>
+                    <div className="text-slate-500 text-xs font-medium mt-1">Average Subnet Finality</div>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-[#10B981]/10 flex items-center justify-center">
+                    <RiLineChartLine className="text-[#10B981] text-xl" />
                 </div>
             </div>
 
-            {/* Waveform */}
-            <div className="flex items-end gap-1.5 h-16 mt-2">
-                {history.map((v, i) => {
-                    const h = 15 + ((v - minH) / Math.max(maxH - minH, 1)) * 40
-                    const isLast = i === history.length - 1
-                    return (
-                        <motion.div
-                            key={i}
-                            animate={{ height: h }}
-                            transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                            className="flex-1 rounded-t-md"
-                            style={{
-                                background: isLast ? '#10B981' : '#E2E8F0',
-                            }}
-                        />
-                    )
-                })}
+            {/* Abstract Chart */}
+            <div className="flex items-end justify-between h-20 gap-1.5 mb-6">
+                {bars.map((height, i) => (
+                    <motion.div
+                        key={i}
+                        initial={{ height: 0 }}
+                        whileInView={{ height: `${height}%` }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: i * 0.05, ease: "easeOut" }}
+                        className="flex-1 rounded-t-sm bg-slate-200"
+                    />
+                ))}
             </div>
 
-            {/* Block feed */}
-            <div className="flex flex-col gap-2 flex-1 mt-2">
-                {blocks.map((b, i) => (
-                    <motion.div
-                        key={b.id}
-                        initial={i === 0 ? { opacity: 0, x: -12 } : { opacity: 1 }}
-                        animate={{ opacity: 1 - i * 0.3, x: 0 }}
-                        transition={{ duration: 0.35, type: 'spring', stiffness: 300 }}
-                        className="flex items-center justify-between px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-100"
-                    >
-                        <div className="flex items-center gap-2.5">
-                            <motion.div animate={i === 0 ? { scale: [1, 1.3, 1] } : {}} transition={{ duration: 0.4 }}>
-                                <RiCheckLine className="text-[#10B981] text-sm" />
-                            </motion.div>
-                            <span className="text-slate-500 font-mono text-[11px] font-semibold">
-                                Block #{b.num.toLocaleString()}
-                            </span>
-                        </div>
-                        <span className="font-mono text-[11px] font-bold" style={{ color: b.ms < 300 ? '#10B981' : '#F59E0B' }}>
-                            {b.ms}ms
-                        </span>
-                    </motion.div>
-                ))}
+            {/* Network Stats */}
+            <div className="grid grid-cols-2 gap-3 mt-auto">
+                <div className="flex flex-col">
+                    <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">Uptime</span>
+                    <span className="text-slate-900 text-sm font-bold">99.99%</span>
+                </div>
+                <div className="flex flex-col">
+                    <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">Active Nodes</span>
+                    <span className="text-slate-900 text-sm font-bold">1,248</span>
+                </div>
             </div>
         </div>
     )
 }
 
 // ══════════════════════════════════════════════════════════════
-// CELL D — Security
+// CELL D — Security (Rich Descriptions)
 // ══════════════════════════════════════════════════════════════
-const CHECKS = [
-    { label: 'No KYC required', color: '#10B981' },
-    { label: 'Your keys, your tokens', color: '#10B981' },
-    { label: 'Audited smart contracts', color: '#3B82F6' },
-    { label: 'Zero platform custody', color: '#8B5CF6' },
-    { label: 'Instant withdrawals', color: '#FF7100' },
+const SECURITY_FEATURES = [
+    { icon: RiKey2Line, title: 'Zero Platform Custody', desc: 'Smart contracts execute payouts directly to your wallet. We never hold your HGAI.', color: '#FF7100' },
+    { icon: RiShieldCheckLine, title: 'Audited Architecture', desc: 'Core logic rigorously tested and verified by top-tier Web3 security firms.', color: '#3B82F6' },
+    { icon: RiLockPasswordLine, title: 'Permissionless Entry', desc: 'No KYC bottlenecks. Connect your wallet and begin earning immediately.', color: '#10B981' },
 ]
 
 function SecurityCell() {
-    const [activeCheck, setActiveCheck] = useState(-1)
-
-    useEffect(() => {
-        let i = 0
-        const t = setInterval(() => {
-            setActiveCheck(i % CHECKS.length)
-            i++
-        }, 900)
-        return () => clearInterval(t)
-    }, [])
-
     return (
-        <div className="flex flex-col gap-2 select-none h-full mt-2">
-            {CHECKS.map((c, i) => {
-                const isActive = i === activeCheck
-                return (
-                    <motion.div
-                        key={c.label}
-                        animate={{
-                            background: isActive ? `${c.color}0A` : '#F8FAFC',
-                            borderColor: isActive ? `${c.color}30` : 'transparent',
-                        }}
-                        transition={{ duration: 0.3 }}
-                        className="flex items-center gap-3 px-3.5 py-3 rounded-xl border border-transparent"
-                    >
-                        <motion.div
-                            animate={isActive ? { scale: [1, 1.2, 1] } : {}}
-                            transition={{ duration: 0.3 }}
-                            className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 bg-white shadow-sm border border-slate-100">
-                            <RiShieldCheckLine style={{ color: isActive ? c.color : '#CBD5E1', fontSize: 12 }} />
-                        </motion.div>
-                        <span className="text-[13px] font-semibold" style={{ color: isActive ? '#1E293B' : '#64748B' }}>
-                            {c.label}
-                        </span>
-                        {isActive && (
-                            <motion.div initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} className="ml-auto">
-                                <RiKey2Line style={{ color: c.color }} className="text-sm" />
-                            </motion.div>
-                        )}
-                    </motion.div>
-                )
-            })}
+        <div className="flex flex-col gap-6 mt-4 h-full">
+            {SECURITY_FEATURES.map((feature, i) => (
+                <div key={feature.title} className="flex items-start gap-4 group">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-white border border-slate-200 shadow-sm group-hover:scale-105 transition-transform duration-300">
+                        <feature.icon style={{ color: feature.color }} className="text-lg" />
+                    </div>
+                    <div>
+                        <h4 className="text-sm font-bold text-slate-900 mb-1">{feature.title}</h4>
+                        <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                            {feature.desc}
+                        </p>
+                    </div>
+                </div>
+            ))}
         </div>
     )
 }
@@ -458,20 +282,20 @@ function SecurityCell() {
 // ══════════════════════════════════════════════════════════════
 export default function FeaturesSection() {
     return (
-        <section id="features" className="px-4 sm:px-6 py-20 bg-[#FAFAFC] relative overflow-hidden">
+        <section id="features" className="px-4 sm:px-6 py-24 bg-[#FAFAFC] relative overflow-hidden">
             <div className="max-w-7xl mx-auto relative z-10">
                 {/* Heading */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="text-center mb-16"
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="text-center mb-20"
                 >
-                    <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-5 leading-[1.1]">
+                    <h2 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tighter mb-6 leading-tight">
                         Built for <span className="text-[#FF7100]">Serious Contributors</span>
                     </h2>
-                    <p className="text-slate-500 text-lg max-w-2xl text-balance mx-auto leading-relaxed">
+                    <p className="text-slate-500 text-lg max-w-2xl text-balance mx-auto leading-relaxed font-medium">
                         Every tool and feature in the HumanGrid ecosystem is engineered to maximize your HGAI rewards and streamline your labeling workflow.
                     </p>
                 </motion.div>
@@ -481,28 +305,28 @@ export default function FeaturesSection() {
 
                     {/* A — AI Matching: 2 cols on LG */}
                     <div className="md:col-span-2 lg:col-span-2">
-                        <BentoCard color="#FF7100" label="Smart Matching" title="AI assigns optimal datasets instantly" delay={0}>
+                        <BentoCard color="#FF7100" label="Smart Matching" title="AI assigns optimal datasets instantly" delay={0.1}>
                             <AIMatchingCell />
                         </BentoCard>
                     </div>
 
                     {/* B — Reputation: 1 col, 2 rows on LG */}
                     <div className="md:col-span-2 lg:col-span-1 lg:row-span-2">
-                        <BentoCard color="#3B82F6" label="Reputation & Ranks" title="Level up your profile, unlock bigger multipliers" delay={0.1} className="h-full" style={{ minHeight: 480 }}>
+                        <BentoCard color="#8B5CF6" label="Reputation & Ranks" title="Level up your profile, unlock bigger multipliers" delay={0.2} className="h-full" style={{ minHeight: 480 }}>
                             <ReputationCell />
                         </BentoCard>
                     </div>
 
                     {/* C — Speed: 1 col */}
                     <div className="md:col-span-1">
-                        <BentoCard color="#10B981" label="On-Chain Finality" title="Transactions confirmed in milliseconds" delay={0.15}>
+                        <BentoCard color="#10B981" label="On-Chain Finality" title="Transactions confirmed in milliseconds" delay={0.3}>
                             <SpeedCell />
                         </BentoCard>
                     </div>
 
                     {/* D — Security: 1 col */}
                     <div className="md:col-span-1">
-                        <BentoCard color="#8B5CF6" label="Total Security" title="Decentralized, non-custodial architecture" delay={0.2}>
+                        <BentoCard color="#3B82F6" label="Total Security" title="Decentralized, non-custodial architecture" delay={0.4}>
                             <SecurityCell />
                         </BentoCard>
                     </div>
