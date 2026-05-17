@@ -38,7 +38,7 @@ function WalletButtonContent() {
     // Chain check
     useEffect(() => {
         if (isConnected && chain) {
-            setShowChainWarning(chain.id !== 56 && chain.id !== 97)
+            setShowChainWarning(chain.id !== 56 && chain.id !== 97) // BSC Mainnet & Testnet
         } else {
             setShowChainWarning(false)
         }
@@ -71,23 +71,22 @@ function WalletButtonContent() {
     if (!isConnected) {
         return (
             <motion.button
-                whileHover={{ scale: 1.03 }}
+                whileHover={{ scale: 1.03, y: -1 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => open()}
-                className="relative flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-bold text-sm overflow-hidden group"
+                className="relative flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-[14px] overflow-hidden group transition-all shadow-[0_4px_15px_-4px_rgba(255,113,0,0.4)] hover:shadow-[0_8px_20px_-6px_rgba(255,113,0,0.5)]"
                 style={{
-                    background: 'linear-gradient(135deg, #C6FF1A, #9ECC00)',
-                    color: '#080C09',
-                    boxShadow: '0 0 20px rgba(198,255,26,0.25), inset 0 1px 0 rgba(255,255,255,0.3)',
+                    background: 'linear-gradient(135deg, #FF8A33 0%, #FF7100 100%)',
+                    color: '#FFFFFF',
+                    border: '1px solid rgba(255,255,255,0.2)'
                 }}
             >
-                {/* Shine sweep */}
+                {/* Fast Shine Sweep */}
                 <span
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                    style={{ background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%)' }}
+                    className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-[1.2s] ease-in-out bg-gradient-to-r from-transparent via-white/30 to-transparent"
                 />
                 <RiWalletLine className="text-base shrink-0 relative z-10" />
-                <span className="relative z-10">Connect Wallet</span>
+                <span className="relative z-10 tracking-wide drop-shadow-sm">Connect</span>
             </motion.button>
         )
     }
@@ -95,58 +94,58 @@ function WalletButtonContent() {
     // ── Connected — show address + dropdown ────────────────────────────────
     return (
         <div className="relative" ref={dropdownRef}>
-            {/* Main pill */}
+            {/* Main connected pill */}
             <motion.button
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.02, backgroundColor: '#F8FAFC' }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setShowDropdown(v => !v)}
-                className="flex items-center gap-2.5 sm:px-4 px-1.5 py-2.5 rounded-xl border font-semibold sm:text-sm text-[10px] transition-all"
+                className="flex items-center gap-2.5 sm:px-4 px-3 py-2 rounded-xl border font-bold sm:text-[13px] text-[11px] transition-all bg-white"
                 style={{
-                    color: '#C6FF1A',
-                    borderColor: 'rgba(198,255,26,0.25)',
-                    background: 'rgba(198,255,26,0.06)',
-                    boxShadow: showDropdown ? '0 0 20px rgba(198,255,26,0.15)' : '0 0 12px rgba(198,255,26,0.06)',
+                    color: '#475569', // slate-600
+                    borderColor: showDropdown ? 'rgba(0,0,0,0.1)' : 'rgba(0,0,0,0.06)',
+                    boxShadow: showDropdown ? '0 4px 15px -5px rgba(0,0,0,0.05)' : '0 2px 8px -2px rgba(0,0,0,0.02)',
                 }}
             >
-                {/* Status dot */}
+                {/* Active Network Status Dot */}
                 <span className="relative flex h-2 w-2 shrink-0">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C6FF1A] opacity-50" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C6FF1A]" />
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-xl bg-[#10B981] opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10B981]" />
                 </span>
-                <span className="font-mono">{truncAddr(address)}</span>
+                <span className="font-mono tracking-tight text-slate-700">{truncAddr(address)}</span>
+                
                 {/* Chevron */}
                 <motion.span
                     animate={{ rotate: showDropdown ? 180 : 0 }}
                     transition={{ duration: 0.2 }}
-                    className="text-[#C6FF1A]/50 text-xs"
+                    className="text-slate-400 text-xs ml-0.5"
                 >
                     ▾
                 </motion.span>
             </motion.button>
 
-            {/* Dropdown */}
+            {/* Premium Light Dropdown */}
             <AnimatePresence>
                 {showDropdown && (
                     <motion.div
-                        initial={{ opacity: 0, y: 6, scale: 0.97 }}
+                        initial={{ opacity: 0, y: 8, scale: 0.98 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 6, scale: 0.97 }}
-                        transition={{ duration: 0.15 }}
-                        className="absolute top-full right-0 mt-2 w-64 rounded-2xl border overflow-hidden z-50"
+                        exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        className="absolute top-full right-0 mt-3 w-64 rounded-[1.25rem] border overflow-hidden z-50 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)]"
                         style={{
-                            background: 'rgba(8,12,9,0.95)',
-                            borderColor: 'rgba(198,255,26,0.15)',
+                            background: 'rgba(255,255,255,0.95)',
+                            borderColor: 'rgba(0,0,0,0.08)',
                             backdropFilter: 'blur(20px)',
-                            boxShadow: '0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(198,255,26,0.08)',
+                            WebkitBackdropFilter: 'blur(20px)'
                         }}
                     >
-                        {/* Address block */}
-                        <div className="px-4 pt-4 pb-3 border-b border-white/6">
-                            <div className="flex items-center gap-2 mb-1">
-                                <RiShieldCheckLine className="text-[#C6FF1A] text-sm" />
-                                <span className="text-[#C6FF1A] text-xs font-bold uppercase tracking-wider">Connected</span>
+                        {/* Address block header */}
+                        <div className="px-5 pt-5 pb-4 border-b border-slate-100 bg-slate-50/50">
+                            <div className="flex items-center gap-2 mb-1.5">
+                                <RiShieldCheckLine className="text-[#10B981] text-sm" />
+                                <span className="text-[#10B981] text-[10px] font-semibold">Network Connected</span>
                             </div>
-                            <div className="font-mono text-white/70 text-xs break-all leading-relaxed">
+                            <div className="font-mono text-slate-600 text-xs break-all leading-relaxed font-medium">
                                 {address}
                             </div>
                         </div>
@@ -155,50 +154,50 @@ function WalletButtonContent() {
                         <div className="p-2 space-y-1">
                             <button
                                 onClick={handleCopy}
-                                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/60 hover:text-white hover:bg-white/5 transition-all text-left"
+                                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-all text-left"
                             >
                                 {copied
-                                    ? <RiCheckLine className="text-[#C6FF1A] text-base shrink-0" />
+                                    ? <RiCheckLine className="text-[#10B981] text-base shrink-0" />
                                     : <RiFileCopyLine className="text-base shrink-0" />
                                 }
-                                <span>{copied ? 'Copied!' : 'Copy Address'}</span>
+                                <span>{copied ? 'Address Copied!' : 'Copy Wallet Address'}</span>
                             </button>
 
                             <a
                                 href={`https://bscscan.com/address/${address}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/60 hover:text-white hover:bg-white/5 transition-all"
+                                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-all"
                             >
                                 <RiExternalLinkLine className="text-base shrink-0" />
                                 <span>View on BSCScan</span>
                             </a>
 
-                            <div className="h-px bg-white/6 my-1" />
+                            <div className="h-px bg-slate-100 my-2 mx-2" />
 
                             <button
                                 onClick={handleDisconnect}
-                                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-red-400/70 hover:text-red-400 hover:bg-red-400/8 transition-all text-left"
+                                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-red-500/80 hover:text-red-600 hover:bg-red-50 transition-all text-left"
                             >
                                 <RiLogoutBoxLine className="text-base shrink-0" />
-                                <span>Disconnect</span>
+                                <span>Disconnect Wallet</span>
                             </button>
                         </div>
                     </motion.div>
                 )}
             </AnimatePresence>
 
-            {/* Chain warning tooltip */}
+            {/* Chain warning tooltip (Updated for Light Theme) */}
             <AnimatePresence>
                 {showChainWarning && (
                     <motion.div
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
-                        className="absolute top-full mt-2 right-0 flex items-center gap-2 px-3 py-2 rounded-xl border border-[#FBBF24]/30 bg-[#FBBF24]/10 text-[#FBBF24] text-xs font-semibold whitespace-nowrap z-50"
+                        className="absolute top-full mt-3 right-0 flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#F59E0B]/30 bg-[#FFFBEB] text-[#D97706] text-xs font-bold whitespace-nowrap z-50 shadow-md"
                     >
                         <RiAlertLine className="text-sm" />
-                        Switch to BNB Chain
+                        Switch to BNB Smart Chain
                     </motion.div>
                 )}
             </AnimatePresence>
