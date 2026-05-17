@@ -19,73 +19,39 @@ function NavLink({ label, onClick }) {
     return (
         <button
             onClick={onClick}
-            className="relative text-sm font-medium text-white/50 hover:text-white transition-colors duration-200 group"
+            className="relative text-sm font-bold tracking-wide text-slate-500 hover:text-slate-900 transition-colors duration-300 group"
         >
             {label}
-            <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-[#C6FF1A] group-hover:w-full transition-all duration-300" />
+            <span className="absolute -bottom-1 left-0 w-0 h-[2px] rounded-full bg-[#FF7100] group-hover:w-full transition-all duration-300" />
         </button>
     )
 }
 
-// ─── Film Grain ───────────────────────────────────────────────────────────────
-function FilmGrain() {
+// ─── Subtle Light Mesh & Grain ────────────────────────────────────────────────
+function PremiumBackground() {
     return (
-        <>
-            {/* SVG filter definition */}
-            <svg width="0" height="0" className="absolute" aria-hidden>
-                <defs>
-                    <filter id="film-grain" x="0%" y="0%" width="100%" height="100%" colorInterpolationFilters="linearRGB">
-                        <feTurbulence
-                            type="fractalNoise"
-                            baseFrequency="0.65"
-                            numOctaves="3"
-                            stitchTiles="stitch"
-                            result="noise"
-                        />
-                        <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise" />
-                        <feBlend in="SourceGraphic" in2="grayNoise" mode="overlay" result="blend" />
-                        <feComponentTransfer in="blend">
-                            <feFuncA type="linear" slope="1" />
-                        </feComponentTransfer>
-                    </filter>
-                </defs>
-            </svg>
-
-            {/* Animated noise overlay */}
-            <div
-                aria-hidden
-                className="film-grain-overlay"
+        <div className="fixed inset-0 pointer-events-none z-0" aria-hidden>
+            {/* Elegant Top Ambient Glow */}
+            <div style={{
+                position: 'absolute', inset: 0,
+                backgroundImage: 'radial-gradient(ellipse 80% 40% at 50% -5%, rgba(255,113,0,0.06) 0%, transparent 60%)',
+            }} />
+            
+            {/* Minimalist Grid Pattern */}
+            <div style={{
+                position: 'absolute', inset: 0,
+                backgroundImage: 'linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px)',
+                backgroundSize: '48px 48px',
+            }} />
+            
+            {/* Ultra-faint film grain for texture (replaces the heavy dark grain) */}
+            <div 
+                className="absolute inset-0 opacity-[0.03] mix-blend-multiply"
+                style={{
+                    backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.8\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")',
+                }} 
             />
-
-            <style>{`
-                @keyframes grainShift {
-                    0%   { transform: translate(0, 0); }
-                    10%  { transform: translate(-2%, -3%); }
-                    20%  { transform: translate(3%, 2%); }
-                    30%  { transform: translate(-1%, 4%); }
-                    40%  { transform: translate(4%, -1%); }
-                    50%  { transform: translate(-3%, 1%); }
-                    60%  { transform: translate(2%, -4%); }
-                    70%  { transform: translate(-4%, 2%); }
-                    80%  { transform: translate(1%, -2%); }
-                    90%  { transform: translate(-2%, 3%); }
-                    100% { transform: translate(0, 0); }
-                }
-                .film-grain-overlay {
-                    position: fixed;
-                    inset: -50%;
-                    width: 200%;
-                    height: 200%;
-                    z-index: 9999;
-                    pointer-events: none;
-                    opacity: 0.028;
-                    animation: grainShift 0.12s steps(1) infinite;
-                    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-                    background-repeat: repeat;
-                    background-size: 256px 256px;
-                }
-            `}</style>
-        </>
+        </div>
     )
 }
 
@@ -108,45 +74,32 @@ export default function HomePage() {
     ]
 
     return (
-        <div className="min-h-screen text-white overflow-x-hidden" style={{ background: '#060A07' }}>
+        <div className="min-h-screen text-slate-900 overflow-x-hidden bg-[#FAFAFC]">
 
-            {/* ── Film grain ── */}
-            <FilmGrain />
-
-            {/* ── Background mesh ── */}
-            <div className="fixed inset-0 pointer-events-none" aria-hidden>
-                <div style={{
-                    position: 'absolute', inset: 0,
-                    backgroundImage: 'radial-gradient(ellipse 80% 45% at 50% -5%, rgba(198,255,26,0.06) 0%, transparent 60%)',
-                }} />
-                <div style={{
-                    position: 'absolute', inset: 0,
-                    backgroundImage: 'linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px)',
-                    backgroundSize: '60px 60px',
-                }} />
-            </div>
+            <PremiumBackground />
 
             {/* ══════════════════════════════════════════════
-                NAVBAR  (unchanged from original)
+                PREMIUM LIGHT NAVBAR
             ═══════════════════════════════════════════════ */}
             <header
                 className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
-                style={{ paddingTop: scrolled ? 8 : 16, paddingBottom: scrolled ? 8 : 12 }}
+                style={{ paddingTop: scrolled ? 12 : 24, paddingBottom: scrolled ? 12 : 20 }}
             >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6">
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="flex items-center justify-between gap-6 px-5 py-3 rounded-2xl transition-all duration-500"
+                        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                        className="flex items-center justify-between gap-6 px-6 py-3.5 rounded-xl transition-all duration-500"
                         style={{
-                            background: scrolled ? 'rgba(6,10,7,0.92)' : 'rgba(6,10,7,0.6)',
+                            background: scrolled ? 'rgba(255, 255, 255, 0.85)' : 'rgba(255, 255, 255, 0.5)',
                             border: '1px solid',
-                            borderColor: scrolled ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.06)',
-                            backdropFilter: 'blur(24px)',
+                            borderColor: scrolled ? 'rgba(0, 0, 0, 0.08)' : 'rgba(0, 0, 0, 0.03)',
+                            backdropFilter: 'blur(20px)',
+                            WebkitBackdropFilter: 'blur(20px)',
                             boxShadow: scrolled
-                                ? '0 8px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(198,255,26,0.06)'
-                                : '0 4px 20px rgba(0,0,0,0.3)',
+                                ? '0 10px 40px -10px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,1)'
+                                : '0 4px 20px -10px rgba(0,0,0,0.02)',
                         }}
                     >
                         {/* Logo */}
@@ -155,11 +108,11 @@ export default function HomePage() {
                             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                             className="flex items-center gap-2.5 shrink-0"
                         >
-                            <Image src="/logo.png" alt="SYNTHOS" width={130} height={36} />
+                            <Image src="/logo.png" alt="HumanGrid AI" width={130} height={36} className="drop-shadow-sm" />
                         </motion.button>
 
                         {/* Desktop nav links */}
-                        <nav className="hidden md:flex items-center gap-7">
+                        <nav className="hidden md:flex items-center gap-8">
                             {navItems.map(item => (
                                 <NavLink
                                     key={item.label}
@@ -170,21 +123,22 @@ export default function HomePage() {
                         </nav>
 
                         {/* Right side */}
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-4">
                             <motion.button
-                                whileHover={{ scale: 1.03 }}
+                                whileHover={{ scale: 1.03, backgroundColor: '#F8FAFC' }}
                                 whileTap={{ scale: 0.97 }}
                                 onClick={() => router.push('/ai')}
-                                className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white/60 hover:text-white border border-white/8 hover:border-white/20 bg-white/3 hover:bg-white/6 transition-all"
+                                className="hidden sm:flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-[13px] font-bold text-slate-600 hover:text-slate-900 border border-slate-200 bg-white shadow-sm transition-all"
                             >
                                 Dashboard
-                                <RiArrowRightLine className="text-xs" />
+                                <RiArrowRightLine className="text-sm text-[#FF7100]" />
                             </motion.button>
 
                             <WalletButton />
 
+                            {/* Mobile Menu Toggle */}
                             <button
-                                className="md:hidden p-2 rounded-xl border border-white/10 bg-white/5 text-white/60 hover:text-white transition-colors"
+                                className="md:hidden p-2.5 rounded-full border border-slate-200 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors shadow-sm"
                                 onClick={() => setMobileOpen(v => !v)}
                             >
                                 {mobileOpen ? <RiCloseLine className="text-lg" /> : <RiMenuLine className="text-lg" />}
@@ -192,18 +146,18 @@ export default function HomePage() {
                         </div>
                     </motion.div>
 
-                    {/* Mobile drawer */}
+                    {/* Mobile drawer (Light Theme) */}
                     <AnimatePresence>
                         {mobileOpen && (
                             <motion.div
-                                initial={{ opacity: 0, y: -8 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -8 }}
-                                transition={{ duration: 0.2 }}
-                                className="mt-2 rounded-2xl border border-white/8 overflow-hidden md:hidden"
-                                style={{ background: 'rgba(6,10,7,0.97)', backdropFilter: 'blur(24px)' }}
+                                initial={{ opacity: 0, y: -10, scale: 0.98 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                                transition={{ duration: 0.25, ease: "easeOut" }}
+                                className="mt-3 rounded-[1.5rem] border border-slate-200/80 overflow-hidden md:hidden shadow-xl"
+                                style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(20px)' }}
                             >
-                                <div className="px-5 py-4 space-y-1">
+                                <div className="px-5 py-5 space-y-1">
                                     {navItems.map(item => (
                                         <button
                                             key={item.label}
@@ -211,17 +165,19 @@ export default function HomePage() {
                                                 document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' })
                                                 setMobileOpen(false)
                                             }}
-                                            className="w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium text-white/60 hover:text-white hover:bg-white/5 transition-all"
+                                            className="w-full text-left px-4 py-3 rounded-xl text-[15px] font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all"
                                         >
                                             {item.label}
                                         </button>
                                     ))}
-                                    <div className="pt-2 border-t border-white/6">
+                                    <div className="pt-3 mt-2 border-t border-slate-100">
                                         <button
                                             onClick={() => { router.push('/ai'); setMobileOpen(false) }}
-                                            className="w-full text-left px-3 py-2.5 rounded-xl text-sm font-semibold text-[#C6FF1A] hover:bg-[#C6FF1A]/8 transition-all"
+                                            className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-[15px] font-bold text-white shadow-md"
+                                            style={{ background: 'linear-gradient(135deg, #FF8A33 0%, #FF7100 100%)' }}
                                         >
-                                            → Launch Dashboard
+                                            Launch Dashboard
+                                            <RiArrowRightLine />
                                         </button>
                                     </div>
                                 </div>
@@ -234,7 +190,7 @@ export default function HomePage() {
             {/* ══════════════════════════════════════════════
                 PAGE SECTIONS
             ═══════════════════════════════════════════════ */}
-            <main>
+            <main className="relative z-10">
                 <HeroSection />
                 <HowItWorks />
                 <AboutSection />
@@ -243,7 +199,9 @@ export default function HomePage() {
                 <CTABanner />
             </main>
 
-            <LandingFooter />
+            <div className="relative z-10">
+                <LandingFooter />
+            </div>
         </div>
     )
 }
