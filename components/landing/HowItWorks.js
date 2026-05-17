@@ -12,13 +12,10 @@ import {
 function SectionHeading() {
     return (
         <div className="text-center mb-20">
-            <div className="inline-block px-3 py-1 mb-4 rounded-full bg-[#FF7100]/10 border border-[#FF7100]/20 text-[#FF7100] text-xs font-bold tracking-wide uppercase">
-                HumanGrid AI
-            </div>
             <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mt-2 mb-4 tracking-tight leading-[1.1]">
                 Decentralized AI Training <br /> Data Platform
             </h2>
-            <p className="text-slate-500 mt-5 text-lg max-w-2xl mx-auto leading-relaxed">
+            <p className="text-slate-500 mt-5 text-lg text-balance max-w-2xl mx-auto leading-relaxed">
                 Join the community-powered AI data labeling, verification, and reward ecosystem. 
                 Complete micro-tasks and earn <span className="font-bold text-slate-800">HGAI</span> natively.
             </p>
