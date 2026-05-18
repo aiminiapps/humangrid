@@ -5,38 +5,39 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
     RiHistoryLine, RiCheckDoubleLine, RiTimeLine, RiCloseLine,
     RiCoinLine, RiExternalLinkLine, RiFileCopyLine, RiCheckLine,
-    RiRefreshLine, RiLoader4Line, RiArrowUpLine, RiSparklingLine,
-    RiShieldCheckLine, RiErrorWarningLine, RiBarChartLine,
+    RiRefreshLine, RiLoader4Line, RiSparklingLine,
+    RiShieldCheckLine, RiArrowRightUpLine
 } from 'react-icons/ri'
 
+// ─── Status Config (Premium Light Theme) ──────────────────────────────────────
 const STATUS_CONFIG = {
     confirmed: {
         label: 'Confirmed',
         icon: RiCheckDoubleLine,
-        color: '#34D399',
-        bg: 'bg-[#34D399]/10 border-[#34D399]/30',
-        dot: 'bg-[#34D399]',
+        color: '#10B981', // Emerald
+        bg: 'bg-emerald-50 border-emerald-200',
+        dot: 'bg-emerald-500',
     },
     sent: {
         label: 'Sent',
         icon: RiCheckLine,
-        color: '#C6FF1A',
-        bg: 'bg-[#C6FF1A]/10 border-[#C6FF1A]/30',
-        dot: 'bg-[#C6FF1A]',
+        color: '#3B82F6', // Blue
+        bg: 'bg-blue-50 border-blue-200',
+        dot: 'bg-blue-500',
     },
     pending: {
         label: 'Pending',
         icon: RiTimeLine,
-        color: '#FBBF24',
-        bg: 'bg-[#FBBF24]/10 border-[#FBBF24]/30',
-        dot: 'bg-[#FBBF24] animate-pulse',
+        color: '#F59E0B', // Amber
+        bg: 'bg-amber-50 border-amber-200',
+        dot: 'bg-amber-500 animate-pulse',
     },
     failed: {
         label: 'Failed',
         icon: RiCloseLine,
-        color: '#FF6B35',
-        bg: 'bg-[#FF6B35]/10 border-[#FF6B35]/30',
-        dot: 'bg-[#FF6B35]',
+        color: '#EF4444', // Red
+        bg: 'bg-red-50 border-red-200',
+        dot: 'bg-red-500',
     },
 }
 
@@ -69,18 +70,18 @@ function CopyButton({ text }) {
     return (
         <button
             onClick={handleCopy}
-            className="p-1 rounded-md hover:bg-white/10 transition-all text-white/30 hover:text-white/70"
+            className="p-1 rounded-md hover:bg-slate-100 transition-all text-slate-400 hover:text-slate-700"
             title="Copy to clipboard"
         >
             {copied
-                ? <RiCheckLine className="text-[#34D399] text-xs" />
-                : <RiFileCopyLine className="text-xs" />
+                ? <RiCheckLine className="text-emerald-500 text-sm" />
+                : <RiFileCopyLine className="text-sm" />
             }
         </button>
     )
 }
 
-// ─── Reward Row ───────────────────────────────────────────────────────────────
+// ─── Reward Row (Ledger Style) ────────────────────────────────────────────────
 function RewardRow({ reward, index }) {
     const [expanded, setExpanded] = useState(false)
     const status = STATUS_CONFIG[reward.status] || STATUS_CONFIG.pending
@@ -90,50 +91,51 @@ function RewardRow({ reward, index }) {
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.06 }}
-            className={`rounded-xl border transition-all duration-200 overflow-hidden
-                ${expanded ? 'border-white/15 bg-white/4' : 'border-white/6 bg-white/2 hover:border-white/12 hover:bg-white/3'}`}
+            transition={{ delay: index * 0.05 }}
+            className={`rounded-2xl border transition-all duration-300 overflow-hidden shadow-sm
+                ${expanded ? 'border-[#FF7100]/30 bg-orange-50/30' : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-md'}`}
         >
             {/* Main Row */}
             <button
                 onClick={() => setExpanded(!expanded)}
-                className="w-full flex items-center gap-3 p-4 text-left"
+                className="w-full flex items-center justify-between p-4 text-left group"
             >
-                {/* Status dot + icon */}
-                <div className="relative shrink-0">
-                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center border ${status.bg}`}>
-                        <StatusIcon style={{ color: status.color }} className="text-base" />
+                <div className="flex items-center gap-4">
+                    {/* Status dot + icon */}
+                    <div className="relative shrink-0">
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center border shadow-sm ${status.bg}`}>
+                            <StatusIcon style={{ color: status.color }} className="text-lg" />
+                        </div>
+                        <div className={`absolute -top-1 -right-1 w-2.5 h-2.5 border-2 border-white rounded-full ${status.dot}`} />
                     </div>
-                    <div className={`absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full ${status.dot}`} />
-                </div>
 
-                {/* Amount + time */}
-                <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                        <span className="text-[#C6FF1A] font-black text-base">+{reward.amount}</span>
-                        <span className="text-white/40 text-xs font-medium">HGAI</span>
-                        {reward.ai_powered && (
-                            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-[#60A5FA]/10 border border-[#60A5FA]/20 text-[#60A5FA] text-[10px] font-semibold">
-                                <RiSparklingLine className="text-[9px]" />
-                                AI
+                    {/* Amount + time */}
+                    <div className="flex flex-col">
+                        <div className="flex items-center gap-2">
+                            <span className={`font-black text-lg ${expanded ? 'text-[#FF7100]' : 'text-slate-800 transition-colors group-hover:text-[#FF7100]'}`}>
+                                +{reward.amount}
                             </span>
-                        )}
-                    </div>
-                    <div className="flex items-center gap-2 mt-0.5">
-                        <span className="text-white/25 text-xs">{timeAgo(reward.created_at)}</span>
-                        {reward.tx_hash && (
-                            <>
-                                <span className="text-white/15 text-xs">·</span>
-                                <span className="text-white/30 text-xs font-mono">{truncateHash(reward.tx_hash)}</span>
-                            </>
-                        )}
+                            <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-1">HGAI</span>
+                            
+                            {reward.ai_powered && (
+                                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-blue-50 border border-blue-200 text-blue-600 text-[9px] font-bold uppercase tracking-wider ml-1">
+                                    <RiSparklingLine /> AI
+                                </span>
+                            )}
+                        </div>
+                        <span className="text-slate-400 text-[11px] font-medium mt-0.5">{timeAgo(reward.created_at)}</span>
                     </div>
                 </div>
 
-                {/* Status badge */}
-                <div className={`shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-semibold ${status.bg}`}
-                    style={{ color: status.color }}>
-                    {status.label}
+                {/* Right Side: Status Badge */}
+                <div className="flex flex-col items-end gap-2">
+                    <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-bold uppercase tracking-widest shadow-sm ${status.bg}`}
+                        style={{ color: status.color }}>
+                        {status.label}
+                    </div>
+                    {reward.tx_hash && (
+                        <span className="text-slate-300 text-[10px] font-mono">{truncateHash(reward.tx_hash, 4, 4)}</span>
+                    )}
                 </div>
             </button>
 
@@ -145,66 +147,46 @@ function RewardRow({ reward, index }) {
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="border-t border-white/6 px-4 pb-4 pt-3 space-y-3"
+                        className="border-t border-[#FF7100]/10 px-5 pb-5 pt-4 space-y-4 bg-white/50"
                     >
-                        {/* TX Hash */}
+                        <div className="grid grid-cols-2 gap-4">
+                            {/* Amount Detail */}
+                            <div>
+                                <span className="block text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">Total Amount</span>
+                                <span className="text-slate-800 font-extrabold text-sm">{reward.amount} HGAI</span>
+                            </div>
+                            
+                            {/* Date Detail */}
+                            <div>
+                                <span className="block text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">Date Processed</span>
+                                <span className="text-slate-600 text-xs font-medium">
+                                    {reward.created_at ? new Date(reward.created_at).toLocaleString() : '—'}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* TX Hash Row */}
                         {reward.tx_hash && (
-                            <div className="flex items-center justify-between gap-2">
-                                <span className="text-white/30 text-xs font-semibold uppercase tracking-wider">Transaction</span>
-                                <div className="flex items-center gap-1.5">
-                                    <span className="text-white/60 text-xs font-mono">{truncateHash(reward.tx_hash, 10, 8)}</span>
-                                    <CopyButton text={reward.tx_hash} />
-                                    <a
-                                        href={`https://bscscan.com/tx/${reward.tx_hash}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        onClick={e => e.stopPropagation()}
-                                        className="p-1 rounded-md hover:bg-white/10 transition-all text-white/30 hover:text-[#C6FF1A]"
-                                        title="View on BSCScan"
-                                    >
-                                        <RiExternalLinkLine className="text-xs" />
-                                    </a>
+                            <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                                <div>
+                                    <span className="block text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">Transaction Hash</span>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-slate-600 text-xs font-mono bg-slate-100 px-2 py-1 rounded-md">{truncateHash(reward.tx_hash, 10, 8)}</span>
+                                        <CopyButton text={reward.tx_hash} />
+                                    </div>
                                 </div>
+                                
+                                <a
+                                    href={`https://bscscan.com/tx/${reward.tx_hash}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={e => e.stopPropagation()}
+                                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 text-[11px] font-bold uppercase tracking-wider hover:bg-slate-100 hover:text-slate-900 transition-all shadow-sm"
+                                >
+                                    Verify
+                                    <RiArrowRightUpLine className="text-sm" />
+                                </a>
                             </div>
-                        )}
-
-                        {/* Amount detail */}
-                        <div className="flex items-center justify-between">
-                            <span className="text-white/30 text-xs font-semibold uppercase tracking-wider">Amount</span>
-                            <span className="text-[#C6FF1A] font-bold text-sm">{reward.amount} HGAI</span>
-                        </div>
-
-                        {/* Date */}
-                        <div className="flex items-center justify-between">
-                            <span className="text-white/30 text-xs font-semibold uppercase tracking-wider">Date</span>
-                            <span className="text-white/50 text-xs">
-                                {reward.created_at ? new Date(reward.created_at).toLocaleString() : '—'}
-                            </span>
-                        </div>
-
-                        {/* Status */}
-                        <div className="flex items-center justify-between">
-                            <span className="text-white/30 text-xs font-semibold uppercase tracking-wider">Status</span>
-                            <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-semibold ${status.bg}`}
-                                style={{ color: status.color }}>
-                                <StatusIcon className="text-xs" />
-                                {status.label}
-                            </div>
-                        </div>
-
-                        {/* BSCScan link button */}
-                        {reward.tx_hash && (
-                            <a
-                                href={`https://bscscan.com/tx/${reward.tx_hash}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={e => e.stopPropagation()}
-                                className="flex items-center justify-center gap-2 w-full py-2 rounded-xl border border-[#C6FF1A]/20 bg-[#C6FF1A]/5 text-[#C6FF1A] text-xs font-semibold hover:bg-[#C6FF1A]/10 transition-all mt-1"
-                            >
-                                <RiExternalLinkLine />
-                                View on BSCScan
-                                <RiExternalLinkLine className="opacity-50" />
-                            </a>
                         )}
                     </motion.div>
                 )}
@@ -218,7 +200,7 @@ export default function RewardHistory({ userAddress }) {
     const [rewards, setRewards] = useState([])
     const [loading, setLoading] = useState(true)
     const [refreshing, setRefreshing] = useState(false)
-    const [filter, setFilter] = useState('all') // all | confirmed | pending | sent
+    const [filter, setFilter] = useState('all') 
 
     const fetchRewards = useCallback(async (isRefresh = false) => {
         if (isRefresh) setRefreshing(true)
@@ -244,20 +226,21 @@ export default function RewardHistory({ userAddress }) {
     const confirmedCount = rewards.filter(r => r.status === 'confirmed' || r.status === 'sent').length
     const pendingCount = rewards.filter(r => r.status === 'pending').length
 
-    // Filtered list
     const filtered = filter === 'all' ? rewards : rewards.filter(r => r.status === filter)
 
-    // ── Loading skeleton ──
+    // ── Loading skeleton (Light Theme) ──
     if (loading) {
         return (
-            <div className="rounded-2xl border border-white/8 bg-white/2 p-5">
-                <div className="flex items-center gap-2 mb-5">
-                    <RiHistoryLine className="text-[#C6FF1A] text-lg" />
-                    <h3 className="text-white font-bold">Recent Rewards</h3>
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-slate-100 rounded-lg">
+                        <RiHistoryLine className="text-slate-400 text-xl" />
+                    </div>
+                    <h3 className="text-slate-900 font-extrabold text-base">Recent Rewards</h3>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-4">
                     {[1, 2, 3].map(i => (
-                        <div key={i} className="h-16 rounded-xl bg-white/3 animate-pulse" />
+                        <div key={i} className="h-20 rounded-2xl bg-slate-100 animate-pulse" />
                     ))}
                 </div>
             </div>
@@ -265,56 +248,56 @@ export default function RewardHistory({ userAddress }) {
     }
 
     return (
-        <div className="rounded-2xl border border-white/8 bg-white/2 overflow-hidden">
-            {/* ── Header ── */}
-            <div className="px-5 pt-5 pb-4 border-b border-white/6">
-                <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-xl bg-[#C6FF1A]/10 border border-[#C6FF1A]/20 flex items-center justify-center">
-                            <RiHistoryLine className="text-[#C6FF1A] text-sm" />
-                        </div>
+        <div className="rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden flex flex-col max-h-[750px]">
+            {/* ── Header Area ── */}
+            <div className="p-6 pb-5 border-b border-slate-100 bg-slate-50/50">
+                <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-3">
                         <div>
-                            <h3 className="text-white font-bold text-sm">Recent Rewards</h3>
-                            <p className="text-white/30 text-xs">{rewards.length} transactions</p>
+                            <h3 className="text-slate-900 font-extrabold text-base">Ledger History</h3>
+                            <p className="text-slate-500 text-xs font-medium mt-0.5">{rewards.length} tracked transactions</p>
                         </div>
                     </div>
                     <button
                         onClick={() => fetchRewards(true)}
                         disabled={refreshing}
-                        className="p-2 rounded-xl border border-white/8 bg-white/3 text-white/40 hover:text-white/70 hover:border-white/15 transition-all disabled:opacity-40"
-                        title="Refresh"
+                        className="p-2.5 rounded-xl border border-slate-200 bg-white text-slate-400 hover:text-[#FF7100] hover:border-[#FF7100]/30 shadow-sm transition-all disabled:opacity-50"
+                        title="Refresh Ledger"
                     >
-                        <RiRefreshLine className={`text-sm ${refreshing ? 'animate-spin' : ''}`} />
+                        <RiRefreshLine className={`text-base ${refreshing ? 'animate-spin text-[#FF7100]' : ''}`} />
                     </button>
                 </div>
 
-                {/* Stats row */}
+                {/* KPI Stats Row */}
                 <div className="grid grid-cols-3 gap-3">
-                    <div className="rounded-xl bg-[#C6FF1A]/8 border border-[#C6FF1A]/15 p-3 text-center">
-                        <div className="text-[#C6FF1A] font-black text-lg leading-none">{totalEarned}</div>
-                        <div className="text-white/30 text-[10px] font-semibold uppercase tracking-wider mt-1">Total HGAI</div>
+                    <div className="rounded-2xl bg-white border border-[#FF7100]/20 p-4 shadow-[0_2px_10px_rgba(255,113,0,0.04)] relative overflow-hidden">
+                        <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-[#FF7100]/5 rounded-full blur-xl" />
+                        <div className="text-[#FF7100] font-black text-2xl leading-none tracking-tight">{totalEarned}</div>
+                        <div className="text-slate-400 text-[9px] font-bold uppercase tracking-widest mt-1.5">Total HGAI</div>
                     </div>
-                    <div className="rounded-xl bg-[#34D399]/8 border border-[#34D399]/15 p-3 text-center">
-                        <div className="text-[#34D399] font-black text-lg leading-none">{confirmedCount}</div>
-                        <div className="text-white/30 text-[10px] font-semibold uppercase tracking-wider mt-1">Confirmed</div>
+                    <div className="rounded-2xl bg-white border border-emerald-200 p-4 shadow-sm relative overflow-hidden">
+                        <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-emerald-500/5 rounded-full blur-xl" />
+                        <div className="text-emerald-500 font-black text-2xl leading-none tracking-tight">{confirmedCount}</div>
+                        <div className="text-slate-400 text-[9px] font-bold uppercase tracking-widest mt-1.5">Confirmed</div>
                     </div>
-                    <div className="rounded-xl bg-[#FBBF24]/8 border border-[#FBBF24]/15 p-3 text-center">
-                        <div className="text-[#FBBF24] font-black text-lg leading-none">{pendingCount}</div>
-                        <div className="text-white/30 text-[10px] font-semibold uppercase tracking-wider mt-1">Pending</div>
+                    <div className="rounded-2xl bg-white border border-amber-200 p-4 shadow-sm relative overflow-hidden">
+                        <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-amber-500/5 rounded-full blur-xl" />
+                        <div className="text-amber-500 font-black text-2xl leading-none tracking-tight">{pendingCount}</div>
+                        <div className="text-slate-400 text-[9px] font-bold uppercase tracking-widest mt-1.5">Pending</div>
                     </div>
                 </div>
             </div>
 
             {/* ── Filter Tabs ── */}
-            <div className="flex gap-1.5 px-5 py-3 border-b border-white/6">
+            <div className="flex gap-2 px-6 py-4 border-b border-slate-100 bg-white z-10">
                 {['all', 'sent', 'confirmed', 'pending'].map(f => (
                     <button
                         key={f}
                         onClick={() => setFilter(f)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all
+                        className={`px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest transition-all
                             ${filter === f
-                                ? 'bg-[#C6FF1A]/15 border border-[#C6FF1A]/30 text-[#C6FF1A]'
-                                : 'text-white/30 hover:text-white/60'
+                                ? 'bg-[#FF7100] text-white shadow-md'
+                                : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-800'
                             }`}
                     >
                         {f === 'all' ? `All (${rewards.length})` : f}
@@ -322,8 +305,8 @@ export default function RewardHistory({ userAddress }) {
                 ))}
             </div>
 
-            {/* ── Reward List ── */}
-            <div className="p-4 space-y-2 max-h-[420px] overflow-y-auto scrollbar-hide">
+            {/* ── Reward List (Scrollable Area) ── */}
+            <div className="flex-1 p-6 space-y-3 overflow-y-auto custom-scrollbar">
                 <AnimatePresence mode="popLayout">
                     {filtered.length > 0 ? (
                         filtered.map((reward, i) => (
@@ -333,13 +316,13 @@ export default function RewardHistory({ userAddress }) {
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="text-center py-10"
+                            className="text-center py-12"
                         >
-                            <div className="w-14 h-14 rounded-2xl bg-white/3 border border-white/8 flex items-center justify-center mx-auto mb-3">
-                                <RiCoinLine className="text-white/20 text-2xl" />
+                            <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center mx-auto mb-4 shadow-sm">
+                                <RiCoinLine className="text-slate-300 text-3xl" />
                             </div>
-                            <p className="text-white/40 font-medium text-sm">No rewards yet</p>
-                            <p className="text-white/20 text-xs mt-1">Complete tasks to start earning HGAI</p>
+                            <p className="text-slate-800 font-extrabold text-base">No ledger entries yet</p>
+                            <p className="text-slate-500 text-sm font-medium mt-1">Complete tasks to start earning rewards.</p>
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -347,22 +330,35 @@ export default function RewardHistory({ userAddress }) {
 
             {/* ── Footer ── */}
             {rewards.length > 0 && (
-                <div className="px-5 py-3 border-t border-white/6 flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 text-white/25 text-xs">
-                        <RiShieldCheckLine className="text-[#34D399] text-xs" />
-                        <span>Verified on BSC Mainnet</span>
+                <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between shrink-0">
+                    <div className="flex items-center gap-2 text-slate-500 text-xs font-bold uppercase tracking-wider">
+                        <RiShieldCheckLine className="text-emerald-500 text-sm" />
+                        <span>BSC Mainnet Secure</span>
                     </div>
                     <a
                         href={`https://bscscan.com/address/${userAddress}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1 text-[#C6FF1A]/60 hover:text-[#C6FF1A] text-xs font-semibold transition-colors"
+                        className="flex items-center gap-1.5 text-slate-500 hover:text-[#FF7100] text-[11px] font-bold uppercase tracking-widest transition-colors"
                     >
-                        View all on BSCScan
-                        <RiExternalLinkLine className="text-xs" />
+                        Open Scanner
+                        <RiExternalLinkLine className="text-sm" />
                     </a>
                 </div>
             )}
+            
+            <style jsx>{`
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background-color: #E2E8F0;
+                    border-radius: 10px;
+                }
+            `}</style>
         </div>
     )
 }
