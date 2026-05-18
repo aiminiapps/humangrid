@@ -13,23 +13,23 @@ import {
 import RewardAnimation from './RewardAnimation'
 import Image from 'next/image'
 
-// ─── Category Config ──────────────────────────────────────────────────────────
+// ─── Category Config (Updated for Premium Light Theme) ────────────────────────
 const CATEGORIES = [
-    { id: 'all', label: 'All Tasks', icon: RiGlobalLine, color: '#C6FF1A', bg: 'from-[#C6FF1A]/20 to-[#C6FF1A]/5' },
-    { id: 'sentiment', label: 'Sentiment', icon: RiBarChartLine, color: '#C6FF1A', bg: 'from-[#C6FF1A]/20 to-[#C6FF1A]/5' },
-    { id: 'risk', label: 'Risk', icon: RiShieldLine, color: '#FF6B35', bg: 'from-[#FF6B35]/20 to-[#FF6B35]/5' },
-    { id: 'tagging', label: 'Tagging', icon: RiHashtag, color: '#A78BFA', bg: 'from-[#A78BFA]/20 to-[#A78BFA]/5' },
-    { id: 'prediction', label: 'Prediction', icon: RiSparklingLine, color: '#38BDF8', bg: 'from-[#38BDF8]/20 to-[#38BDF8]/5' },
-    { id: 'research', label: 'Research', icon: RiSearchLine, color: '#34D399', bg: 'from-[#34D399]/20 to-[#34D399]/5' },
-    { id: 'validation', label: 'AI Validation', icon: RiRobot2Line, color: '#60A5FA', bg: 'from-[#60A5FA]/20 to-[#60A5FA]/5' },
-    { id: 'creative', label: 'Creative', icon: RiPaletteLine, color: '#FBBF24', bg: 'from-[#FBBF24]/20 to-[#FBBF24]/5' },
-    { id: 'social', label: 'Social', icon: RiGlobalLine, color: '#FB7185', bg: 'from-[#FB7185]/20 to-[#FB7185]/5' },
+    { id: 'all', label: 'All Tasks', icon: RiGlobalLine, color: '#FF7100', bg: 'bg-[#FF7100]/10' },
+    { id: 'sentiment', label: 'Sentiment', icon: RiBarChartLine, color: '#FF7100', bg: 'bg-[#FF7100]/10' },
+    { id: 'risk', label: 'Risk', icon: RiShieldLine, color: '#EF4444', bg: 'bg-[#EF4444]/10' },
+    { id: 'tagging', label: 'Tagging', icon: RiHashtag, color: '#8B5CF6', bg: 'bg-[#8B5CF6]/10' },
+    { id: 'prediction', label: 'Prediction', icon: RiSparklingLine, color: '#0EA5E9', bg: 'bg-[#0EA5E9]/10' },
+    { id: 'research', label: 'Research', icon: RiSearchLine, color: '#10B981', bg: 'bg-[#10B981]/10' },
+    { id: 'validation', label: 'AI Validation', icon: RiRobot2Line, color: '#3B82F6', bg: 'bg-[#3B82F6]/10' },
+    { id: 'creative', label: 'Creative', icon: RiPaletteLine, color: '#F59E0B', bg: 'bg-[#F59E0B]/10' },
+    { id: 'social', label: 'Social', icon: RiGlobalLine, color: '#EC4899', bg: 'bg-[#EC4899]/10' },
 ]
 
 const DIFFICULTY_CONFIG = {
-    easy: { label: 'EASY', color: '#34D399', bg: 'bg-[#34D399]/10 border-[#34D399]/40 text-[#34D399]' },
-    medium: { label: 'MEDIUM', color: '#FBBF24', bg: 'bg-[#FBBF24]/10 border-[#FBBF24]/40 text-[#FBBF24]' },
-    hard: { label: 'HARD', color: '#FF6B35', bg: 'bg-[#FF6B35]/10 border-[#FF6B35]/40 text-[#FF6B35]' },
+    easy: { label: 'EASY', color: '#10B981', bg: 'bg-[#10B981]/10 border-[#10B981]/30 text-[#10B981]' },
+    medium: { label: 'MEDIUM', color: '#F59E0B', bg: 'bg-[#F59E0B]/10 border-[#F59E0B]/30 text-[#F59E0B]' },
+    hard: { label: 'HARD', color: '#EF4444', bg: 'bg-[#EF4444]/10 border-[#EF4444]/30 text-[#EF4444]' },
 }
 
 const getCategoryConfig = (catId) => CATEGORIES.find(c => c.id === catId) || CATEGORIES[0]
@@ -63,7 +63,6 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
         setIsSubmitting(true)
         setAiProcessing(true)
 
-        // Cycle through AI messages
         let msgIdx = 0
         setAiMessage(aiMessages[0])
         const msgInterval = setInterval(() => {
@@ -79,8 +78,6 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
                     taskId: task.id,
                     answer: selectedAnswer,
                     userAddress,
-                    // Send full task object so server can handle AI-generated tasks
-                    // that don't exist in the DB or mockTasks
                     taskData: task.ai_generated ? task : undefined,
                 }),
             })
@@ -111,18 +108,18 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
         return (
             <motion.div
                 initial={{ opacity: 1 }}
-                animate={{ opacity: 0.5, scale: 0.98 }}
-                className="relative rounded-2xl border border-[#C6FF1A]/30 bg-[#C6FF1A]/5 p-5 overflow-hidden"
+                animate={{ opacity: 0.6, scale: 0.99 }}
+                className="relative rounded-2xl border border-emerald-200 bg-emerald-50 p-5 overflow-hidden shadow-sm"
             >
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#C6FF1A]/20 flex items-center justify-center">
-                        <RiCheckLine className="text-[#C6FF1A] text-xl" />
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
+                        <RiCheckLine className="text-emerald-600 text-xl" />
                     </div>
                     <div>
-                        <p className="text-[#C6FF1A] font-semibold text-sm">Completed!</p>
-                        <p className="text-white/40 text-xs">{task.title}</p>
+                        <p className="text-emerald-700 font-bold text-sm">Completed successfully</p>
+                        <p className="text-emerald-600/70 text-xs font-medium">{task.title}</p>
                     </div>
-                    <div className="ml-auto text-[#C6FF1A] font-bold text-sm">+{task.base_reward} HGAI</div>
+                    <div className="ml-auto text-emerald-600 font-black text-sm">+{task.base_reward} HGAI</div>
                 </div>
                 <AnimatePresence>{showReward && <RewardAnimation rewardData={rewardData} />}</AnimatePresence>
             </motion.div>
@@ -138,25 +135,20 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
                 transition={{ delay: index * 0.05 }}
                 className={`group relative rounded-2xl border transition-all duration-300 overflow-hidden cursor-pointer
                     ${isLocked
-                        ? 'border-white/5 bg-white/2 opacity-50 cursor-not-allowed'
+                        ? 'border-slate-200 bg-slate-50 opacity-60 cursor-not-allowed'
                         : isExpanded
-                            ? 'border-[#C6FF1A]/40 bg-[#0B0F0C] shadow-[0_0_30px_rgba(198,255,26,0.08)]'
-                            : 'border-white/8 bg-[#0D1210] hover:border-[#C6FF1A]/25 hover:bg-[#0F1612] hover:shadow-[0_0_20px_rgba(198,255,26,0.05)]'
+                            ? 'border-slate-300 bg-white shadow-md'
+                            : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm'
                     }`}
                 onClick={() => !isLocked && !isExpanded && setIsExpanded(true)}
             >
-                {/* Glow accent top border */}
-                {isExpanded && (
-                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C6FF1A]/60 to-transparent" />
-                )}
-
-                {/* Category color accent */}
+                {/* Category color accent edge */}
                 <div
-                    className="absolute left-0 top-0 bottom-0 w-0.5 rounded-l-2xl"
-                    style={{ backgroundColor: catConfig.color, opacity: isExpanded ? 1 : 0.3 }}
+                    className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl transition-opacity"
+                    style={{ backgroundColor: catConfig.color, opacity: isExpanded ? 1 : 0.4 }}
                 />
 
-                <div className="p-5 pl-6">
+                <div className="p-5 pl-7">
                     {/* Header Row */}
                     <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 min-w-0">
@@ -167,11 +159,11 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
                                 </span>
 
                                 <span
-                                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold border"
+                                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold border"
                                     style={{
                                         color: catConfig.color,
-                                        borderColor: `${catConfig.color}30`,
-                                        backgroundColor: `${catConfig.color}10`
+                                        borderColor: `${catConfig.color}40`,
+                                        backgroundColor: `${catConfig.color}15`
                                     }}
                                 >
                                     <catConfig.icon className="text-xs" />
@@ -179,21 +171,21 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
                                 </span>
 
                                 {task.ai_powered && (
-                                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold border border-[#60A5FA]/30 bg-[#60A5FA]/10 text-[#60A5FA]">
+                                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold border border-blue-200 bg-blue-50 text-blue-600">
                                         <RiRobot2Line className="text-xs" />
                                         AI Validated
                                     </span>
                                 )}
 
                                 {task.is_one_time && (
-                                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold border border-[#FB7185]/30 bg-[#FB7185]/10 text-[#FB7185]">
+                                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold border border-pink-200 bg-pink-50 text-pink-600">
                                         <RiStarLine className="text-xs" />
                                         One-Time
                                     </span>
                                 )}
 
                                 {isLocked && (
-                                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold border border-white/10 bg-white/5 text-white/40">
+                                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold border border-slate-200 bg-slate-100 text-slate-500">
                                         <RiLockLine className="text-xs" />
                                         Level {task.min_level}+
                                     </span>
@@ -201,13 +193,13 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
                             </div>
 
                             {/* Title */}
-                            <h3 className={`text-base font-bold leading-snug mb-1.5 transition-colors ${isExpanded ? 'text-[#C6FF1A]' : 'text-white/90 group-hover:text-white'}`}>
+                            <h3 className={`text-base font-extrabold leading-snug mb-1.5 transition-colors ${isExpanded ? 'text-[#FF7100]' : 'text-slate-900 group-hover:text-slate-700'}`}>
                                 {task.title}
                             </h3>
 
                             {/* Description preview */}
                             {!isExpanded && (
-                                <p className="text-white/40 text-sm leading-relaxed line-clamp-2">
+                                <p className="text-slate-500 text-sm font-medium leading-relaxed line-clamp-2">
                                     {task.description}
                                 </p>
                             )}
@@ -215,13 +207,13 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
 
                         {/* Reward + Time */}
                         <div className="flex flex-col items-end gap-2 shrink-0">
-                            <div className="flex items-center gap-1.5 bg-[#C6FF1A]/10 border border-[#C6FF1A]/25 rounded-xl px-3 py-2">
-                                <RiCoinLine className="text-[#C6FF1A] text-sm" />
-                                <span className="text-[#C6FF1A] font-black text-sm">+{task.base_reward}</span>
-                                <span className="text-[#C6FF1A]/60 text-xs font-medium">HGAI</span>
+                            <div className="flex items-center gap-1.5 bg-[#FF7100]/10 border border-[#FF7100]/20 rounded-xl px-3 py-2">
+                                <RiCoinLine className="text-[#FF7100] text-sm" />
+                                <span className="text-[#FF7100] font-black text-sm">+{task.base_reward}</span>
+                                <span className="text-[#FF7100]/70 text-xs font-bold">HGAI</span>
                             </div>
                             {task.estimated_time && (
-                                <div className="flex items-center gap-1 text-white/30 text-xs">
+                                <div className="flex items-center gap-1 text-slate-400 font-medium text-xs">
                                     <RiTimeLine className="text-xs" />
                                     {task.estimated_time}
                                 </div>
@@ -237,10 +229,10 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
                                 animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ duration: 0.3 }}
-                                className="mt-5 pt-5 border-t border-white/8"
+                                className="mt-5 pt-5 border-t border-slate-100"
                             >
                                 {/* Full description */}
-                                <p className="text-white/70 text-sm leading-relaxed mb-5 bg-white/3 rounded-xl p-4 border border-white/5">
+                                <p className="text-slate-600 text-sm font-medium leading-relaxed mb-5 bg-slate-50 rounded-xl p-4 border border-slate-100">
                                     {task.description}
                                 </p>
 
@@ -251,7 +243,7 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         onClick={e => e.stopPropagation()}
-                                        className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-xl border border-[#FB7185]/30 bg-[#FB7185]/10 text-[#FB7185] text-sm font-semibold hover:bg-[#FB7185]/20 transition-all"
+                                        className="inline-flex items-center gap-2 mb-4 px-4 py-2.5 rounded-xl border border-pink-200 bg-pink-50 text-pink-600 text-sm font-bold hover:bg-pink-100 transition-all shadow-sm"
                                     >
                                         <RiExternalLinkLine />
                                         Complete Action First
@@ -260,24 +252,24 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
                                 )}
 
                                 {/* Options */}
-                                <div className="space-y-2.5 mb-5">
-                                    <p className="text-white/40 text-xs font-semibold uppercase tracking-wider mb-3">Select your answer:</p>
+                                <div className="space-y-2.5 mb-6">
+                                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-3">Select your answer:</p>
                                     {task.options?.map((option, i) => (
                                         <motion.button
                                             key={i}
                                             whileHover={{ x: 4 }}
                                             whileTap={{ scale: 0.99 }}
                                             onClick={e => { e.stopPropagation(); setSelectedAnswer(option) }}
-                                            className={`w-full p-3.5 rounded-xl border text-left flex items-center justify-between transition-all text-sm font-medium
+                                            className={`w-full p-4 rounded-xl border text-left flex items-center justify-between transition-all text-sm font-bold
                                                 ${selectedAnswer === option
-                                                    ? 'border-[#C6FF1A]/60 bg-[#C6FF1A]/10 text-[#C6FF1A] shadow-[0_0_15px_rgba(198,255,26,0.1)]'
-                                                    : 'border-white/8 bg-white/3 text-white/60 hover:border-white/20 hover:bg-white/5 hover:text-white/80'
+                                                    ? 'border-[#FF7100] bg-[#FF7100]/5 text-[#FF7100] shadow-sm'
+                                                    : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900'
                                                 }`}
                                         >
                                             <span>{option}</span>
                                             {selectedAnswer === option && (
                                                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
-                                                    <RiCheckLine className="text-[#C6FF1A] text-lg" />
+                                                    <RiCheckLine className="text-[#FF7100] text-xl" />
                                                 </motion.div>
                                             )}
                                         </motion.button>
@@ -291,10 +283,10 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
                                             initial={{ opacity: 0, y: 5 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0 }}
-                                            className="mb-4 flex items-center gap-3 px-4 py-3 rounded-xl bg-[#60A5FA]/10 border border-[#60A5FA]/20"
+                                            className="mb-5 flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-50 border border-blue-200 shadow-sm"
                                         >
-                                            <RiLoader4Line className="text-[#60A5FA] text-lg animate-spin" />
-                                            <span className="text-[#60A5FA] text-sm font-medium">{aiMessage}</span>
+                                            <RiLoader4Line className="text-blue-500 text-lg animate-spin" />
+                                            <span className="text-blue-600 text-sm font-bold">{aiMessage}</span>
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
@@ -307,8 +299,8 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
                                         onClick={handleSubmit}
                                         disabled={!selectedAnswer || isSubmitting}
                                         className="flex-1 py-3.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2
-                                            bg-[#C6FF1A] text-[#0B0F0C] hover:bg-[#D4FF4D] shadow-[0_0_20px_rgba(198,255,26,0.3)]
-                                            disabled:opacity-30 disabled:cursor-not-allowed disabled:shadow-none"
+                                            bg-gradient-to-r from-[#FF7100] to-[#D95A00] text-white shadow-md hover:shadow-lg
+                                            disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
                                     >
                                         {isSubmitting ? (
                                             <>
@@ -326,7 +318,7 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
                                         onClick={e => { e.stopPropagation(); setIsExpanded(false); setSelectedAnswer(null) }}
-                                        className="px-4 py-3.5 rounded-xl border border-white/10 bg-white/3 text-white/40 hover:text-white/70 hover:border-white/20 transition-all"
+                                        className="px-4 py-3.5 rounded-xl border border-slate-200 bg-white text-slate-500 hover:text-slate-900 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm"
                                     >
                                         <RiCloseLine className="text-xl" />
                                     </motion.button>
@@ -337,7 +329,7 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
 
                     {/* Collapsed click hint */}
                     {!isExpanded && !isLocked && (
-                        <div className="mt-3 flex items-center gap-1.5 text-white/20 text-xs group-hover:text-white/40 transition-colors">
+                        <div className="mt-3 flex items-center gap-1.5 text-slate-400 font-medium text-xs group-hover:text-[#FF7100] transition-colors">
                             <RiArrowRightLine className="text-xs" />
                             Click to start task
                         </div>
@@ -355,17 +347,15 @@ export default function TasksSection({ tasks = [], userAddress, userLevel, onTas
     const [activeCategory, setActiveCategory] = useState('all')
     const [searchQuery, setSearchQuery] = useState('')
     const [difficultyFilter, setDifficultyFilter] = useState('all')
-    const [sortBy, setSortBy] = useState('reward') // reward | difficulty | time
+    const [sortBy, setSortBy] = useState('reward')
     const [aiTasks, setAiTasks] = useState([])
     const [isGenerating, setIsGenerating] = useState(false)
     const [generatingCategory, setGeneratingCategory] = useState(null)
     const [showAIPanel, setShowAIPanel] = useState(false)
     const [aiDifficulty, setAiDifficulty] = useState('medium')
 
-    // Combine static + AI-generated tasks
     const allTasks = [...tasks, ...aiTasks]
 
-    // Filter & sort
     const filteredTasks = allTasks
         .filter(task => {
             const matchCat = activeCategory === 'all' || task.category === activeCategory
@@ -384,7 +374,6 @@ export default function TasksSection({ tasks = [], userAddress, userLevel, onTas
             return 0
         })
 
-    // Category counts
     const categoryCounts = {}
     CATEGORIES.forEach(cat => {
         categoryCounts[cat.id] = cat.id === 'all'
@@ -392,7 +381,6 @@ export default function TasksSection({ tasks = [], userAddress, userLevel, onTas
             : allTasks.filter(t => t.category === cat.id).length
     })
 
-    // Generate AI tasks
     const generateAITasks = async () => {
         const targetCategory = generatingCategory || (activeCategory !== 'all' ? activeCategory : 'sentiment')
         setIsGenerating(true)
@@ -413,7 +401,6 @@ export default function TasksSection({ tasks = [], userAddress, userLevel, onTas
         }
     }
 
-    // Total potential earnings
     const totalPotential = filteredTasks.reduce((sum, t) => sum + (t.base_reward || 0), 0)
 
     return (
@@ -421,26 +408,26 @@ export default function TasksSection({ tasks = [], userAddress, userLevel, onTas
             {/* ── Section Header ── */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl font-black text-white flex items-center gap-2">
-                        <RiFireLine className="text-[#C6FF1A]" />
+                    <h2 className="text-2xl font-extrabold text-slate-900 flex items-center gap-2">
+                        <RiFireLine className="text-[#FF7100]" />
                         Available Tasks
-                        <span className="text-sm font-normal text-white/30 ml-1">
+                        <span className="text-sm font-semibold text-slate-400 ml-1">
                             ({filteredTasks.length} tasks)
                         </span>
                     </h2>
-                    <p className="text-white/40 text-sm mt-1">
-                        Earn up to <span className="text-[#C6FF1A] font-bold">{totalPotential} HGAI</span> from current selection
+                    <p className="text-slate-500 font-medium text-sm mt-1">
+                        Earn up to <span className="text-[#FF7100] font-black">{totalPotential} HGAI</span> from current selection
                     </p>
                 </div>
 
                 {/* AI Generate Button */}
                 <motion.button
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => setShowAIPanel(!showAIPanel)}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#60A5FA]/30 bg-[#60A5FA]/10 text-[#60A5FA] text-sm font-semibold hover:bg-[#60A5FA]/20 transition-all"
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-blue-200 bg-blue-50 text-blue-600 text-sm font-bold hover:bg-blue-100 transition-all shadow-sm"
                 >
-                    <Image src="/icon.png" alt="Logo" width={25} height={25} />
+                    <Image src="/icon.png" alt="Logo" width={20} height={20} className="filter-none opacity-80" />
                     AI Generate Tasks
                 </motion.button>
             </div>
@@ -452,39 +439,39 @@ export default function TasksSection({ tasks = [], userAddress, userLevel, onTas
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="rounded-2xl border border-[#60A5FA]/25 bg-gradient-to-br from-[#60A5FA]/10 to-[#60A5FA]/3 p-5 overflow-hidden"
+                        className="rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-5 overflow-hidden shadow-sm"
                     >
                         <div className="flex items-center gap-2 mb-4">
-                            <h3 className="text-white font-bold">AI Task Generator</h3>
-                            <span className="text-xs text-white/30 ml-auto">Powered by Mistral 7B</span>
+                            <h3 className="text-slate-800 font-extrabold">AI Task Generator</h3>
+                            <span className="text-xs font-bold text-blue-400 ml-auto bg-blue-100 px-2 py-1 rounded-md">Powered by Mistral 7B</span>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                             {/* Category select */}
                             <div>
-                                <label className="text-white/40 text-xs font-semibold uppercase tracking-wider mb-2 block">Category</label>
+                                <label className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-2 block">Category</label>
                                 <select
                                     value={generatingCategory || 'sentiment'}
                                     onChange={e => setGeneratingCategory(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-white/80 text-sm focus:outline-none focus:border-[#60A5FA]/40"
+                                    className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-slate-700 text-sm font-medium shadow-sm focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-all"
                                 >
                                     {CATEGORIES.filter(c => c.id !== 'all').map(cat => (
-                                        <option key={cat.id} value={cat.id} className="bg-[#0B0F0C]">{cat.label}</option>
+                                        <option key={cat.id} value={cat.id} className="bg-white">{cat.label}</option>
                                     ))}
                                 </select>
                             </div>
 
                             {/* Difficulty select */}
                             <div>
-                                <label className="text-white/40 text-xs font-semibold uppercase tracking-wider mb-2 block">Difficulty</label>
+                                <label className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-2 block">Difficulty</label>
                                 <select
                                     value={aiDifficulty}
                                     onChange={e => setAiDifficulty(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-white/80 text-sm focus:outline-none focus:border-[#60A5FA]/40"
+                                    className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-slate-700 text-sm font-medium shadow-sm focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-all"
                                 >
-                                    <option value="easy" className="bg-[#0B0F0C]">Easy (10 HGAI)</option>
-                                    <option value="medium" className="bg-[#0B0F0C]">Medium (30 HGAI)</option>
-                                    <option value="hard" className="bg-[#0B0F0C]">Hard (50 HGAI)</option>
+                                    <option value="easy" className="bg-white">Easy (10 HGAI)</option>
+                                    <option value="medium" className="bg-white">Medium (30 HGAI)</option>
+                                    <option value="hard" className="bg-white">Hard (50 HGAI)</option>
                                 </select>
                             </div>
 
@@ -495,7 +482,7 @@ export default function TasksSection({ tasks = [], userAddress, userLevel, onTas
                                     whileTap={{ scale: 0.98 }}
                                     onClick={generateAITasks}
                                     disabled={isGenerating}
-                                    className="w-full py-2.5 rounded-xl bg-[#60A5FA] text-[#0B0F0C] font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50 hover:bg-[#93C5FD] transition-all"
+                                    className="w-full py-2.5 rounded-xl bg-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm disabled:opacity-60 hover:bg-blue-600 transition-all"
                                 >
                                     {isGenerating ? (
                                         <><RiLoader4Line className="animate-spin" /> Generating...</>
@@ -507,11 +494,11 @@ export default function TasksSection({ tasks = [], userAddress, userLevel, onTas
                         </div>
 
                         {aiTasks.length > 0 && (
-                            <div className="flex items-center justify-between text-xs">
-                                <span className="text-white/40">{aiTasks.length} AI-generated tasks added</span>
+                            <div className="flex items-center justify-between text-xs mt-2 pt-4 border-t border-blue-100">
+                                <span className="text-slate-500 font-medium">{aiTasks.length} AI-generated tasks added</span>
                                 <button
                                     onClick={() => setAiTasks([])}
-                                    className="text-white/30 hover:text-white/60 transition-colors flex items-center gap-1"
+                                    className="text-slate-400 hover:text-red-500 font-bold transition-colors flex items-center gap-1"
                                 >
                                     <RiCloseLine /> Clear AI tasks
                                 </button>
@@ -529,19 +516,19 @@ export default function TasksSection({ tasks = [], userAddress, userLevel, onTas
                     return (
                         <motion.button
                             key={cat.id}
-                            whileHover={{ scale: 1.03 }}
-                            whileTap={{ scale: 0.97 }}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                             onClick={() => setActiveCategory(cat.id)}
-                            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-semibold whitespace-nowrap transition-all shrink-0
+                            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-bold whitespace-nowrap transition-all shrink-0 shadow-sm
                                 ${isActive
-                                    ? 'border-[#C6FF1A]/50 bg-[#C6FF1A]/15 text-[#C6FF1A] shadow-[0_0_15px_rgba(198,255,26,0.1)]'
-                                    : 'border-white/8 bg-white/3 text-white/50 hover:border-white/15 hover:text-white/70'
+                                    ? 'border-[#FF7100]/40 bg-[#FF7100]/10 text-[#FF7100]'
+                                    : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:text-slate-700 hover:bg-slate-50'
                                 }`}
                         >
                             <cat.icon className="text-sm" />
                             {cat.label}
                             {count > 0 && (
-                                <span className={`text-xs px-1.5 py-0.5 rounded-md font-bold ${isActive ? 'bg-[#C6FF1A]/20 text-[#C6FF1A]' : 'bg-white/8 text-white/30'}`}>
+                                <span className={`text-xs px-2 py-0.5 rounded-md font-black ${isActive ? 'bg-[#FF7100]/20 text-[#FF7100]' : 'bg-slate-100 text-slate-400'}`}>
                                     {count}
                                 </span>
                             )}
@@ -554,13 +541,13 @@ export default function TasksSection({ tasks = [], userAddress, userLevel, onTas
             <div className="flex flex-col sm:flex-row gap-3">
                 {/* Search */}
                 <div className="relative flex-1">
-                    <RiSearchLine className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30 text-sm" />
+                    <RiSearchLine className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm" />
                     <input
                         type="text"
                         placeholder="Search tasks..."
                         value={searchQuery}
                         onChange={e => setSearchQuery(e.target.value)}
-                        className="w-full bg-white/3 border border-white/8 rounded-xl pl-9 pr-4 py-2.5 text-white/80 text-sm placeholder-white/25 focus:outline-none focus:border-[#C6FF1A]/30 focus:bg-white/5 transition-all"
+                        className="w-full bg-white border border-slate-200 rounded-xl pl-9 pr-4 py-2.5 text-slate-800 text-sm font-medium placeholder-slate-400 shadow-sm focus:outline-none focus:border-[#FF7100]/50 focus:ring-1 focus:ring-[#FF7100]/50 transition-all"
                     />
                 </div>
 
@@ -570,13 +557,13 @@ export default function TasksSection({ tasks = [], userAddress, userLevel, onTas
                         <button
                             key={d}
                             onClick={() => setDifficultyFilter(d)}
-                            className={`px-3 py-2.5 rounded-xl border text-xs font-bold uppercase tracking-wide transition-all
+                            className={`px-4 py-2.5 rounded-xl border text-xs font-bold uppercase tracking-wider transition-all shadow-sm
                                 ${difficultyFilter === d
-                                    ? d === 'all' ? 'border-white/30 bg-white/10 text-white'
-                                        : d === 'easy' ? 'border-[#34D399]/50 bg-[#34D399]/15 text-[#34D399]'
-                                            : d === 'medium' ? 'border-[#FBBF24]/50 bg-[#FBBF24]/15 text-[#FBBF24]'
-                                                : 'border-[#FF6B35]/50 bg-[#FF6B35]/15 text-[#FF6B35]'
-                                    : 'border-white/8 bg-white/3 text-white/30 hover:text-white/60'
+                                    ? d === 'all' ? 'border-slate-300 bg-slate-800 text-white'
+                                        : d === 'easy' ? 'border-emerald-300 bg-emerald-50 text-emerald-600'
+                                            : d === 'medium' ? 'border-amber-300 bg-amber-50 text-amber-600'
+                                                : 'border-red-300 bg-red-50 text-red-600'
+                                    : 'border-slate-200 bg-white text-slate-500 hover:bg-slate-50 hover:text-slate-800'
                                 }`}
                         >
                             {d === 'all' ? 'All' : d}
@@ -588,10 +575,10 @@ export default function TasksSection({ tasks = [], userAddress, userLevel, onTas
                 <select
                     value={sortBy}
                     onChange={e => setSortBy(e.target.value)}
-                    className="bg-white/3 border border-white/8 rounded-xl px-3 py-2.5 text-white/60 text-sm focus:outline-none focus:border-white/20 transition-all"
+                    className="bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-slate-700 font-bold text-sm shadow-sm focus:outline-none focus:border-[#FF7100]/50 transition-all"
                 >
-                    <option value="reward" className="bg-[#0B0F0C]">Sort: Highest Reward</option>
-                    <option value="difficulty" className="bg-[#0B0F0C]">Sort: Easiest First</option>
+                    <option value="reward" className="bg-white font-medium">Sort: Highest Reward</option>
+                    <option value="difficulty" className="bg-white font-medium">Sort: Easiest First</option>
                 </select>
             </div>
 
@@ -613,16 +600,16 @@ export default function TasksSection({ tasks = [], userAddress, userLevel, onTas
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="text-center py-16 rounded-2xl border border-white/5 bg-white/2"
+                            className="text-center py-16 rounded-2xl border border-slate-200 bg-white shadow-sm"
                         >
-                            <RiLightbulbLine className="text-4xl text-white/15 mx-auto mb-3" />
-                            <p className="text-white/40 font-medium">No tasks found</p>
-                            <p className="text-white/20 text-sm mt-1">Try a different category or generate AI tasks</p>
+                            <RiLightbulbLine className="text-4xl text-slate-300 mx-auto mb-3" />
+                            <p className="text-slate-800 font-extrabold">No tasks found</p>
+                            <p className="text-slate-500 font-medium text-sm mt-1">Try a different category or generate AI tasks</p>
                             <motion.button
-                                whileHover={{ scale: 1.03 }}
+                                whileHover={{ scale: 1.02 }}
                                 onClick={generateAITasks}
                                 disabled={isGenerating}
-                                className="mt-4 px-5 py-2.5 rounded-xl bg-[#60A5FA]/15 border border-[#60A5FA]/25 text-[#60A5FA] text-sm font-semibold hover:bg-[#60A5FA]/25 transition-all flex items-center gap-2 mx-auto"
+                                className="mt-5 px-6 py-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-600 text-sm font-bold hover:bg-blue-100 transition-all flex items-center gap-2 mx-auto shadow-sm"
                             >
                                 {isGenerating ? <RiLoader4Line className="animate-spin" /> : <RiSparklingLine />}
                                 Generate AI Tasks
@@ -634,13 +621,13 @@ export default function TasksSection({ tasks = [], userAddress, userLevel, onTas
 
             {/* ── Load More / Refresh ── */}
             {filteredTasks.length > 0 && (
-                <div className="flex justify-center pt-2">
+                <div className="flex justify-center pt-4">
                     <motion.button
-                        whileHover={{ scale: 1.03 }}
-                        whileTap={{ scale: 0.97 }}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                         onClick={generateAITasks}
                         disabled={isGenerating}
-                        className="flex items-center gap-2 px-6 py-3 rounded-xl border border-white/10 bg-white/3 text-white/50 text-sm font-semibold hover:border-white/20 hover:text-white/70 transition-all disabled:opacity-40"
+                        className="flex items-center gap-2 px-6 py-3 rounded-xl border border-slate-200 bg-white text-slate-600 text-sm font-bold hover:border-slate-300 hover:text-slate-900 hover:bg-slate-50 shadow-sm transition-all disabled:opacity-60"
                     >
                         {isGenerating ? (
                             <><RiLoader4Line className="animate-spin" /> Generating more tasks...</>
