@@ -128,7 +128,7 @@ export default function HeroSection() {
                         whileHover={{ scale: 1.02, y: -2 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => router.push('/ai')}
-                        className="relative flex items-center justify-center gap-3 px-8 py-4 rounded-full font-semibold text-[15px] overflow-hidden group transition-all w-full sm:w-auto shadow-[0_12px_30px_-10px_rgba(255,113,0,0.4)] hover:shadow-[0_20px_40px_-12px_rgba(255,113,0,0.5)]"
+                        className="relative flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-semibold text-[15px] overflow-hidden group transition-all w-full sm:w-auto shadow-[0_12px_30px_-10px_rgba(255,113,0,0.4)] hover:shadow-[0_20px_40px_-12px_rgba(255,113,0,0.5)]"
                         style={{ 
                             background: 'linear-gradient(135deg, #FF7100 0%, #D95A00 100%)', 
                             color: '#FFFFFF', 
