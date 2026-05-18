@@ -141,11 +141,12 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
                             : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm'
                     }`}
                 onClick={() => !isLocked && !isExpanded && setIsExpanded(true)}
-            >
+            
+            style={{ borderColor: catConfig.color, borderOpacity: 0.2}}>
                 {/* Category color accent edge */}
                 <div
                     className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl transition-opacity"
-                    style={{ backgroundColor: catConfig.color, opacity: isExpanded ? 1 : 0.4 }}
+                    style={{ borderColor: catConfig.color, opacity: isExpanded ? 1 : 0.4 }}
                 />
 
                 <div className="p-5 pl-7">
@@ -229,7 +230,7 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
                                 animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ duration: 0.3 }}
-                                className="mt-5 pt-5 border-t border-slate-100"
+                                className="mt-5 pt-5 border-t  border-slate-100"
                             >
                                 {/* Full description */}
                                 <p className="text-slate-600 text-sm font-medium leading-relaxed mb-5 bg-slate-50 rounded-xl p-4 border border-slate-100">
@@ -583,7 +584,7 @@ export default function TasksSection({ tasks = [], userAddress, userLevel, onTas
             </div>
 
             {/* ── Task List ── */}
-            <div className="space-y-3">
+            <div className="space-y-3 p-2 max-h-[800px] overflow-y-scroll">
                 <AnimatePresence mode="popLayout">
                     {filteredTasks.length > 0 ? (
                         filteredTasks.map((task, i) => (
