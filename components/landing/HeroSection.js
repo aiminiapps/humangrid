@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { RiArrowRightLine, RiShieldStarLine, RiCheckLine, RiGlobalLine } from 'react-icons/ri'
-import Grainient from './ui/Grainient'
 
 // ─── Animation Configurations ─────────────────────────────────────────────────
 const containerVariants = {
@@ -15,13 +14,14 @@ const containerVariants = {
     }
 }
 
+// Slightly refined the spring animation for a "smoother", more premium entrance
 const itemVariants = {
-    hidden: { opacity: 0, y: 30, filter: 'blur(8px)' },
+    hidden: { opacity: 0, y: 40, filter: 'blur(10px)' },
     show: { 
         opacity: 1, 
         y: 0, 
         filter: 'blur(0px)', 
-        transition: { type: "spring", stiffness: 45, damping: 15 } 
+        transition: { type: "spring", stiffness: 40, damping: 20 } 
     }
 }
 
@@ -30,27 +30,32 @@ export default function HeroSection() {
     const router = useRouter()
 
     return (
-        <section className="relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-8 pt-32 pb-24 overflow-hidden bg-[#FAFAFC]">
+        <section className="relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-8 pt-32 pb-24 overflow-hidden bg-[#FAFAFC] selection:bg-[#FF7100]/20 selection:text-[#FF7100]">
             
             {/* ── Creative & Dynamic Light Background ── */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-                {/* Architectural Grid */}
+                
+                {/* 1. Seamless Top-to-Bottom Dot Mesh */}
                 <div 
-                    className="absolute inset-0 opacity-[0.3]" 
+                    className="absolute inset-0 opacity-[0.35]" 
                     style={{ 
-                        backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px)',
-                        backgroundSize: '48px 48px' 
+                        // Creates the precise dot pattern
+                        backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(15, 23, 42, 0.15) 1px, transparent 0)',
+                        backgroundSize: '32px 32px',
+                        // Masks the top and bottom so the dots fade smoothly into the background
+                        maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
+                        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)'
                     }} 
                 />
                 
-                {/* Drifting Ambient Orbs */}
+                {/* 2. Drifting Ambient Orbs */}
                 <motion.div 
                     animate={{ 
                         x: ['-10%', '10%', '-10%'], 
                         y: ['-5%', '5%', '-5%'] 
                     }}
                     transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute top-[5%] left-[30%] w-[60vw] h-[50vw] max-w-[800px] bg-slate-300/30 blur-[120px] rounded-full mix-blend-multiply" 
+                    className="absolute top-[5%] left-[30%] w-[60vw] h-[50vw] max-w-[800px] bg-slate-300/40 blur-[120px] rounded-full mix-blend-multiply" 
                 />
                 <motion.div 
                     animate={{ 
@@ -60,34 +65,6 @@ export default function HeroSection() {
                     transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
                     className="absolute top-[20%] right-[20%] w-[50vw] h-[40vw] max-w-[600px] bg-[#FF7100]/5 blur-[140px] rounded-full mix-blend-multiply" 
                 />
-                
-                {/* High-End Grain Overlay */}
-                <div className="absolute inset-0 opacity-40 mix-blend-multiply">
-                    <Grainient
-                        color1="#FAFAFC"
-                        color2="#FFF5F0"
-                        color3="#FAFAFC"
-                        timeSpeed={0.1}
-                        colorBalance={0}
-                        warpStrength={0.3}
-                        warpFrequency={3}
-                        warpSpeed={1}
-                        warpAmplitude={20}
-                        blendAngle={0}
-                        blendSoftness={0.1}
-                        rotationAmount={300}
-                        noiseScale={1.5}
-                        grainAmount={0.04}
-                        grainScale={1.2}
-                        grainAnimated={true}
-                        contrast={1.1}
-                        gamma={1}
-                        saturation={0.4}
-                        centerX={0}
-                        centerY={0}
-                        zoom={1}
-                    />
-                </div>
             </div>
 
             {/* ── Orchestrated Text & UI Content ── */}
@@ -98,31 +75,28 @@ export default function HeroSection() {
                 className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center"
             >
                 {/* Elevated Typography Headline */}
-                <motion.div variants={itemVariants} className="text-center mb-10 w-full">
-                    <h1
-                        className="font-extrabold leading-[0.95] tracking-tighter"
-                        style={{ fontSize: 'clamp(3.5rem, 8vw, 7.5rem)' }}
-                    >
+                <motion.div variants={itemVariants} className="text-center mb-12 w-full">
+                    {/* Replaced clamp() with Tailwind responsive font sizes for precision */}
+                    <h1 className="font-bold leading-[1.05] text-4xl sm:text-5xl md:text-6xl lg:text-[5.5rem]">
                         <span className="text-slate-900 drop-shadow-sm">
-                            Train AI Systems
+                            Power the Future of AI
                         </span>
                         <br />
-                        <span className="relative inline-block mt-2">
-                            <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-[#FF7100] via-[#FF913B] to-[#FF7100] italic pr-4 font-bold tracking-tight">
-                                Earn Crypto
+                        <span className="relative inline-block mt-2 sm:mt-4">
+                            <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-[#FF7100] via-[#FF913B] to-[#FF7100] italic pr-4 font-bold">
+                                Earn Crypto Instantly
                             </span>
                         </span>
                     </h1>
-                    <p
-                        className="mt-8 text-slate-500 text-balance font-normal leading-relaxed mx-auto max-w-2xl"
-                        style={{ fontSize: 'clamp(1.1rem, 1.2vw, 1.25rem)' }}
-                    >
+                    
+                    {/* Adjusted line-height and font-weight for better readability */}
+                    <p className="mt-8 text-slate-500 text-balance font-medium leading-relaxed mx-auto max-w-2xl text-lg sm:text-xl">
                         Complete precision micro-tasks that refine intelligence models. 
-                        Receive <span className="text-slate-900 font-semibold">HGAI tokens</span> instantly to your BNB Chain wallet. No friction.
+                        Receive <span className="text-slate-900 font-bold">HGAI tokens</span> directly to your BNB Chain wallet. No friction, just rewards.
                     </p>
                 </motion.div>
 
-                {/* Premium Liquid Glass CTA */}
+                {/* Premium Liquid Glass CTA (Unchanged per your request) */}
                 <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-24 w-full sm:w-auto">
                     <motion.button
                         whileHover={{ scale: 1.02, y: -2 }}
@@ -155,8 +129,8 @@ export default function HeroSection() {
                 </motion.div>
 
                 {/* Milky Glass Trust Metrics */}
-                <motion.div variants={itemVariants} className="flex items-center justify-center w-full max-w-2xl">
-                    <div className="flex flex-wrap items-center justify-center gap-6 w-full border-t border-slate-200/80 pt-8 relative">
+                <motion.div variants={itemVariants} className="flex items-center justify-center w-full max-w-3xl">
+                    <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 w-full border-t border-slate-200/80 pt-10 relative">
                         {/* Subtle highlight line on the border */}
                         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-[1px] bg-gradient-to-r from-transparent via-slate-300 to-transparent" />
                         
@@ -165,9 +139,9 @@ export default function HeroSection() {
                             { icon: RiCheckLine, label: 'Audited Contracts' },
                             { icon: RiGlobalLine, label: 'BNB Chain Native' },
                         ].map((item) => (
-                            <div key={item.label} className="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white/70 backdrop-blur-xl border border-white shadow-[0_2px_15px_-5px_rgba(0,0,0,0.05)] group transition-all duration-300 hover:bg-white">
-                                <item.icon className="text-slate-400 text-lg group-hover:text-[#FF7100] transition-colors duration-500" />
-                                <span className="text-slate-600 text-xs tracking-wider uppercase font-bold">{item.label}</span>
+                            <div key={item.label} className="flex items-center gap-2.5 px-6 py-3 rounded-full bg-white/70 backdrop-blur-xl border border-white shadow-[0_4px_20px_-5px_rgba(0,0,0,0.05)] group transition-all duration-300 hover:bg-white hover:shadow-[0_8px_25px_-5px_rgba(0,0,0,0.08)] hover:-translate-y-0.5">
+                                <item.icon className="text-slate-400 text-xl group-hover:text-[#FF7100] transition-colors duration-500" />
+                                <span className="text-slate-700 text-xs tracking-wider uppercase font-bold">{item.label}</span>
                             </div>
                         ))}
                     </div>
