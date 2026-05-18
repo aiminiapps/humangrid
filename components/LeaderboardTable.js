@@ -3,14 +3,15 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-    RiTrophyLine, RiMedalLine, RiUserLine, RiRefreshLine,
-    RiFlashlightLine, RiArrowUpLine, RiArrowDownLine,
-    RiShieldStarLine, RiGlobalLine, RiBarChartBoxLine,
-    RiFireLine, RiSparklingLine,
+    RiTrophyLine, RiUserLine, RiRefreshLine,
+    RiFlashlightLine, RiBarChartBoxLine,
+    RiFireFill, RiSparklingLine,
+    RiMedalFill, RiVipCrown2Fill, RiStarSmileFill,
+    RiShieldStarFill, RiRocket2Fill, RiAwardFill, RiGlobalLine
 } from 'react-icons/ri'
 import { getUserLevel } from '@/lib/reputation'
 
-// ─── Pinned elite users (always shown at top) ─────────────────────────────────
+// ─── Pinned elite users (Updated for Light Theme & Icons) ─────────────────────
 const ELITE_USERS = [
     {
         id: 'elite-1',
@@ -19,8 +20,10 @@ const ELITE_USERS = [
         total_contributions: 847,
         level: 5,
         _elite: true,
-        _badge: '👑 Legend',
-        _badgeColor: '#C6FF1A',
+        _badge: 'Legend',
+        _icon: RiVipCrown2Fill,
+        _badgeColor: '#FF7100', // Sunrise Orange
+        _badgeBg: 'bg-orange-50 border-orange-200',
     },
     {
         id: 'elite-2',
@@ -29,8 +32,10 @@ const ELITE_USERS = [
         total_contributions: 612,
         level: 5,
         _elite: true,
-        _badge: '🔥 Elite',
-        _badgeColor: '#FBBF24',
+        _badge: 'Elite',
+        _icon: RiFireFill,
+        _badgeColor: '#F59E0B', // Amber
+        _badgeBg: 'bg-amber-50 border-amber-200',
     },
     {
         id: 'elite-3',
@@ -39,62 +44,62 @@ const ELITE_USERS = [
         total_contributions: 489,
         level: 5,
         _elite: true,
-        _badge: '⚡ Pro',
-        _badgeColor: '#A78BFA',
+        _badge: 'Pro',
+        _icon: RiRocket2Fill,
+        _badgeColor: '#3B82F6', // Blue
+        _badgeBg: 'bg-blue-50 border-blue-200',
     },
 ]
 
-// ─── Level colours (matches ReputationCard) ───────────────────────────────────
+// ─── Level colours (Matches new ReputationCard) ───────────────────────────────
 const LEVEL_STYLES = {
-    1: { color: '#9CA3AF', bg: 'bg-[#9CA3AF]/10', border: 'border-[#9CA3AF]/20', icon: '🌱' },
-    2: { color: '#34D399', bg: 'bg-[#34D399]/10', border: 'border-[#34D399]/20', icon: '⚡' },
-    3: { color: '#60A5FA', bg: 'bg-[#60A5FA]/10', border: 'border-[#60A5FA]/20', icon: '🛡️' },
-    4: { color: '#A78BFA', bg: 'bg-[#A78BFA]/10', border: 'border-[#A78BFA]/20', icon: '🏗️' },
-    5: { color: '#C6FF1A', bg: 'bg-[#C6FF1A]/10', border: 'border-[#C6FF1A]/20', icon: '👑' },
+    1: { color: '#94A3B8', bg: 'bg-slate-100', border: 'border-slate-200', icon: RiStarSmileFill },
+    2: { color: '#10B981', bg: 'bg-emerald-50', border: 'border-emerald-200', icon: RiAwardFill },
+    3: { color: '#3B82F6', bg: 'bg-blue-50', border: 'border-blue-200', icon: RiShieldStarFill },
+    4: { color: '#F59E0B', bg: 'bg-amber-50', border: 'border-amber-200', icon: RiRocket2Fill },
+    5: { color: '#FF7100', bg: 'bg-orange-50', border: 'border-orange-200', icon: RiVipCrown2Fill },
 }
 
-// ─── Rank medal / number ──────────────────────────────────────────────────────
+// ─── Rank medal / number (Premium Style) ──────────────────────────────────────
 function RankBadge({ rank }) {
     if (rank === 1) return (
-        <div className="w-8 h-8 rounded-xl bg-[#FBBF24]/15 border border-[#FBBF24]/30 flex items-center justify-center"
-            style={{ boxShadow: '0 0 10px rgba(251,191,36,0.25)' }}>
-            <span className="text-sm">🥇</span>
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-100 to-amber-50 border border-amber-200 flex items-center justify-center shadow-sm shrink-0">
+            <RiMedalFill className="text-amber-500 text-xl drop-shadow-sm" />
         </div>
     )
     if (rank === 2) return (
-        <div className="w-8 h-8 rounded-xl bg-[#9CA3AF]/15 border border-[#9CA3AF]/30 flex items-center justify-center">
-            <span className="text-sm">🥈</span>
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-100 to-slate-50 border border-slate-200 flex items-center justify-center shadow-sm shrink-0">
+            <RiMedalFill className="text-slate-400 text-xl drop-shadow-sm" />
         </div>
     )
     if (rank === 3) return (
-        <div className="w-8 h-8 rounded-xl bg-[#CD7F32]/15 border border-[#CD7F32]/30 flex items-center justify-center">
-            <span className="text-sm">🥉</span>
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-100 to-orange-50 border border-orange-200 flex items-center justify-center shadow-sm shrink-0">
+            <RiMedalFill className="text-orange-500 text-xl drop-shadow-sm" />
         </div>
     )
     return (
-        <div className="w-8 h-8 rounded-xl bg-white/4 border border-white/8 flex items-center justify-center">
-            <span className="text-white/40 text-xs font-black">#{rank}</span>
+        <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0">
+            <span className="text-slate-500 text-xs font-black tracking-tighter">#{rank}</span>
         </div>
     )
 }
 
-// ─── Score bar ────────────────────────────────────────────────────────────────
+// ─── Score bar (Light Theme Gradient) ─────────────────────────────────────────
 function ScoreBar({ score, maxScore }) {
     const pct = maxScore > 0 ? Math.min(100, (score / maxScore) * 100) : 0
     return (
-        <div className="h-1 rounded-full bg-white/5 overflow-hidden mt-1.5">
+        <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden mt-2 shadow-inner">
             <motion.div
-                className="h-full rounded-full bg-[#C6FF1A]"
+                className="h-full rounded-full bg-gradient-to-r from-[#FF7100] to-[#FF9D4A]"
                 initial={{ width: 0 }}
                 animate={{ width: `${pct}%` }}
-                transition={{ duration: 0.8, ease: 'easeOut' }}
-                style={{ opacity: 0.6 + pct / 250 }}
+                transition={{ duration: 1, ease: 'easeOut' }}
             />
         </div>
     )
 }
 
-// ─── Format large numbers ─────────────────────────────────────────────────────
+// ─── Format Helpers ───────────────────────────────────────────────────────────
 function formatNum(n) {
     if (n >= 1000000) return `${(n / 1000000).toFixed(1)}M`
     if (n >= 1000) return `${(n / 1000).toFixed(1)}k`
@@ -106,7 +111,7 @@ function truncAddr(addr) {
     return `${addr.slice(0, 6)}…${addr.slice(-4)}`
 }
 
-// ─── User rank banner ─────────────────────────────────────────────────────────
+// ─── User rank banner (Redesigned as Performance Card) ────────────────────────
 function UserRankBanner({ rank, totalUsers, score }) {
     if (!rank) return null
     const percentile = Math.round((1 - rank / totalUsers) * 100)
@@ -117,49 +122,47 @@ function UserRankBanner({ rank, totalUsers, score }) {
         <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mx-5 mb-0 mt-4 rounded-xl border overflow-hidden"
-            style={{
-                borderColor: isTop10 ? 'rgba(198,255,26,0.35)' : isTop1k ? 'rgba(96,165,250,0.25)' : 'rgba(255,255,255,0.1)',
-                background: isTop10 ? 'rgba(198,255,26,0.06)' : isTop1k ? 'rgba(96,165,250,0.05)' : 'rgba(255,255,255,0.02)',
-            }}
+            className={`mx-6 mb-2 mt-5 rounded-2xl border overflow-hidden shadow-sm transition-all
+                ${isTop10 ? 'border-[#FF7100]/30 bg-orange-50/50' 
+                : isTop1k ? 'border-blue-200 bg-blue-50/50' 
+                : 'border-slate-200 bg-slate-50/50'}`}
         >
-            <div className="px-4 py-3 flex items-center gap-3">
+            <div className="px-5 py-4 flex items-center gap-4">
                 <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-                    style={{
-                        background: isTop10 ? 'rgba(198,255,26,0.12)' : 'rgba(255,255,255,0.05)',
-                        border: `1px solid ${isTop10 ? 'rgba(198,255,26,0.3)' : 'rgba(255,255,255,0.1)'}`,
-                    }}
+                    className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border shadow-sm
+                        ${isTop10 ? 'bg-[#FF7100]/10 border-[#FF7100]/20' 
+                        : isTop1k ? 'bg-blue-100 border-blue-200' 
+                        : 'bg-white border-slate-200'}`}
                 >
-                    {isTop10 ? <RiFireLine className="text-[#C6FF1A] text-base" /> : <RiUserLine className="text-white/40 text-base" />}
+                    {isTop10 ? <RiFireFill className="text-[#FF7100] text-xl" /> : <RiUserLine className="text-slate-400 text-xl" />}
                 </div>
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                        <span className="text-white/50 text-xs">Your Global Rank</span>
+                        <span className="text-slate-500 text-[11px] font-bold uppercase tracking-widest">Global Standing</span>
                         {isTop10 && (
-                            <span className="px-1.5 py-0.5 rounded-md bg-[#C6FF1A]/15 border border-[#C6FF1A]/30 text-[#C6FF1A] text-[9px] font-bold uppercase tracking-wider">
-                                🔥 Top 10
+                            <span className="px-2 py-0.5 rounded-md bg-[#FF7100] text-white text-[9px] font-black uppercase tracking-wider flex items-center gap-1 shadow-sm">
+                                <RiFireFill /> Top 10
                             </span>
                         )}
                         {!isTop10 && isTop1k && (
-                            <span className="px-1.5 py-0.5 rounded-md bg-[#60A5FA]/15 border border-[#60A5FA]/30 text-[#60A5FA] text-[9px] font-bold uppercase tracking-wider">
+                            <span className="px-2 py-0.5 rounded-md bg-blue-100 border border-blue-200 text-blue-600 text-[9px] font-black uppercase tracking-wider">
                                 Top 1k
                             </span>
                         )}
                     </div>
-                    <div className="flex items-baseline gap-1.5 mt-0.5">
+                    <div className="flex items-baseline gap-2 mt-1">
                         <span
-                            className="font-black text-xl leading-none"
-                            style={{ color: isTop10 ? '#C6FF1A' : isTop1k ? '#60A5FA' : 'white' }}
+                            className="font-black text-2xl leading-none tracking-tight"
+                            style={{ color: isTop10 ? '#FF7100' : isTop1k ? '#3B82F6' : '#1E293B' }}
                         >
                             #{formatNum(rank)}
                         </span>
-                        <span className="text-white/25 text-xs">of {formatNum(totalUsers)} users</span>
+                        <span className="text-slate-400 text-xs font-medium">of {formatNum(totalUsers)} users</span>
                     </div>
                 </div>
-                <div className="text-right shrink-0">
-                    <div className="text-white/30 text-[10px] font-semibold uppercase tracking-wider">Percentile</div>
-                    <div className="font-black text-lg" style={{ color: isTop10 ? '#C6FF1A' : '#60A5FA' }}>
+                <div className="text-right shrink-0 border-l border-slate-200/60 pl-5">
+                    <div className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">Percentile</div>
+                    <div className="font-extrabold text-lg" style={{ color: isTop10 ? '#FF7100' : '#3B82F6' }}>
                         Top {100 - percentile < 1 ? '<1' : 100 - percentile}%
                     </div>
                 </div>
@@ -184,7 +187,6 @@ export default function LeaderboardTable({ currentUserAddress }) {
                 : '/api/leaderboard'
             const res = await fetch(url)
             const json = await res.json()
-            // Handle both old array format and new object format
             if (Array.isArray(json)) {
                 setData({ users: json, total_users: 65432, user_rank: null })
             } else if (json && json.users) {
@@ -203,24 +205,25 @@ export default function LeaderboardTable({ currentUserAddress }) {
     useEffect(() => { fetchLeaderboard() }, [fetchLeaderboard])
 
     const { users = [], total_users, user_rank } = data
-    // Merge elite users at top, then real users (skip any real user that matches elite address)
     const eliteAddrs = new Set(ELITE_USERS.map(e => e.wallet_address.toLowerCase()))
     const realUsers = users.filter(u => !eliteAddrs.has(u.wallet_address?.toLowerCase()))
     const allUsers = [...ELITE_USERS, ...realUsers]
     const maxScore = ELITE_USERS[0].reputation_score
     const visibleUsers = allUsers.slice(0, showCount + ELITE_USERS.length)
 
-    // ── Loading skeleton ──
+    // ── Loading skeleton (Light Theme) ──
     if (loading) {
         return (
-            <div className="rounded-2xl border border-white/8 bg-white/2 p-5">
-                <div className="flex items-center gap-2 mb-5">
-                    <RiTrophyLine className="text-[#FBBF24] text-lg" />
-                    <h3 className="text-white font-bold">Top Contributors</h3>
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-amber-50 rounded-lg">
+                        <RiTrophyLine className="text-amber-500 text-xl" />
+                    </div>
+                    <h3 className="text-slate-900 font-extrabold text-base">Top Contributors</h3>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-4">
                     {[1, 2, 3, 4, 5].map(i => (
-                        <div key={i} className="h-14 rounded-xl bg-white/3 animate-pulse" style={{ opacity: 1 - i * 0.15 }} />
+                        <div key={i} className="h-16 rounded-2xl bg-slate-100 animate-pulse" style={{ opacity: 1 - i * 0.15 }} />
                     ))}
                 </div>
             </div>
@@ -228,19 +231,19 @@ export default function LeaderboardTable({ currentUserAddress }) {
     }
 
     return (
-        <div className="rounded-2xl border border-white/8 bg-white/2 overflow-hidden">
+        <div className="rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden flex flex-col max-h-[750px]">
 
             {/* ── Header ── */}
-            <div className="px-5 pt-5 pb-4 border-b border-white/6">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-xl bg-[#FBBF24]/10 border border-[#FBBF24]/20 flex items-center justify-center">
-                            <RiTrophyLine className="text-[#FBBF24] text-sm" />
+            <div className="p-6 pb-5 border-b border-slate-100 bg-slate-50/50">
+                <div className="flex items-center justify-between mb-5">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center shadow-sm">
+                            <RiTrophyLine className="text-amber-500 text-lg" />
                         </div>
                         <div>
-                            <h3 className="text-white font-bold text-sm">Top Contributors</h3>
-                            <p className="text-white/30 text-xs flex items-center gap-1">
-                                <RiGlobalLine className="text-[10px]" />
+                            <h3 className="text-slate-900 font-extrabold text-base">Top Contributors</h3>
+                            <p className="text-slate-500 text-xs font-medium flex items-center gap-1.5 mt-0.5">
+                                <RiUserLine className="text-slate-400" />
                                 {formatNum(total_users || 65000)} global participants
                             </p>
                         </div>
@@ -248,25 +251,28 @@ export default function LeaderboardTable({ currentUserAddress }) {
                     <button
                         onClick={() => fetchLeaderboard(true)}
                         disabled={refreshing}
-                        className="p-2 rounded-xl border border-white/8 bg-white/3 text-white/40 hover:text-white/70 hover:border-white/15 transition-all disabled:opacity-40"
+                        className="p-2.5 rounded-xl border border-slate-200 bg-white text-slate-400 hover:text-[#FF7100] hover:border-[#FF7100]/30 shadow-sm transition-all disabled:opacity-50"
+                        title="Refresh Leaderboard"
                     >
-                        <RiRefreshLine className={`text-sm ${refreshing ? 'animate-spin' : ''}`} />
+                        <RiRefreshLine className={`text-base ${refreshing ? 'animate-spin text-[#FF7100]' : ''}`} />
                     </button>
                 </div>
 
-                {/* Community stats row */}
-                <div className="grid grid-cols-3 gap-2 mt-4">
+                {/* Community Stats Row */}
+                <div className="grid grid-cols-3 gap-3">
                     {[
-                        { label: 'Participants', value: formatNum(total_users || 65000), icon: RiUserLine, color: '#60A5FA' },
-                        { label: 'Top Score', value: formatNum(maxScore), icon: RiFlashlightLine, color: '#C6FF1A' },
-                        { label: 'Your Rank', value: user_rank ? `#${formatNum(user_rank)}` : '—', icon: RiBarChartBoxLine, color: '#FBBF24' },
+                        { label: 'Network Size', value: formatNum(total_users || 65000), icon: RiGlobalLine, color: '#3B82F6', bg: 'bg-blue-50 border-blue-200' },
+                        { label: 'Top Score', value: formatNum(maxScore), icon: RiFlashlightLine, color: '#FF7100', bg: 'bg-orange-50 border-orange-200' },
+                        { label: 'Your Rank', value: user_rank ? `#${formatNum(user_rank)}` : '—', icon: RiBarChartBoxLine, color: '#F59E0B', bg: 'bg-amber-50 border-amber-200' },
                     ].map(s => {
                         const Icon = s.icon
                         return (
-                            <div key={s.label} className="rounded-xl bg-white/3 border border-white/6 px-3 py-2.5 text-center">
-                                <Icon style={{ color: s.color }} className="text-sm mx-auto mb-1" />
-                                <div className="font-black text-white text-sm leading-none">{s.value}</div>
-                                <div className="text-white/25 text-[9px] font-semibold uppercase tracking-wider mt-0.5">{s.label}</div>
+                            <div key={s.label} className="rounded-2xl bg-white border border-slate-200 px-3 py-4 text-center shadow-sm">
+                                <div className={`w-8 h-8 rounded-full mx-auto mb-2 flex items-center justify-center border ${s.bg}`}>
+                                    <Icon style={{ color: s.color }} className="text-sm" />
+                                </div>
+                                <div className="font-extrabold text-slate-800 text-base leading-none tracking-tight">{s.value}</div>
+                                <div className="text-slate-400 text-[9px] font-bold uppercase tracking-widest mt-1.5">{s.label}</div>
                             </div>
                         )
                     })}
@@ -277,108 +283,98 @@ export default function LeaderboardTable({ currentUserAddress }) {
             <UserRankBanner rank={user_rank} totalUsers={total_users} score={0} />
 
             {/* ── Leaderboard rows ── */}
-            <div className="px-4 py-4 space-y-2 max-h-[480px] overflow-y-auto scrollbar-hide">
+            <div className="px-6 py-4 space-y-3 flex-1 overflow-y-auto custom-scrollbar">
                 <AnimatePresence mode="popLayout">
                     {visibleUsers.length > 0 ? visibleUsers.map((user, index) => {
                         const rank = index + 1
                         const isCurrentUser = user.wallet_address?.toLowerCase() === currentUserAddress?.toLowerCase()
                         const levelInfo = getUserLevel(user.reputation_score || 0)
                         const lvlStyle = LEVEL_STYLES[levelInfo.level] || LEVEL_STYLES[1]
-                        const isTop3 = rank <= 3
+                        const LevelIcon = lvlStyle.icon
                         const isElite = !!user._elite
-                        // Insert divider before first real user
+                        const EliteIcon = user._icon
                         const showDivider = index === ELITE_USERS.length
 
                         return (
-                            <>
+                            <div key={user.id || index}>
                                 {showDivider && (
-                                    <div className="flex items-center gap-3 py-1">
-                                        <div className="flex-1 h-px bg-white/6" />
-                                        <span className="text-white/20 text-[10px] font-semibold uppercase tracking-widest shrink-0">Community Rankings</span>
-                                        <div className="flex-1 h-px bg-white/6" />
+                                    <div className="flex items-center gap-4 py-3 opacity-60">
+                                        <div className="flex-1 h-px bg-slate-200" />
+                                        <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest shrink-0">Community Rankings</span>
+                                        <div className="flex-1 h-px bg-slate-200" />
                                     </div>
                                 )}
                                 <motion.div
-                                    key={user.id || index}
                                     initial={{ opacity: 0, y: 8 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: index * 0.04 }}
-                                    className={`rounded-xl border p-3 transition-all duration-200
+                                    className={`rounded-2xl border p-4 transition-all duration-300 shadow-sm hover:shadow-md
                                     ${isCurrentUser
-                                            ? 'border-[#C6FF1A]/30 bg-[#C6FF1A]/5'
-                                            : isElite && rank === 1
-                                                ? 'border-[#C6FF1A]/20 bg-[#C6FF1A]/4'
-                                                : isElite && rank === 2
-                                                    ? 'border-[#FBBF24]/15 bg-[#FBBF24]/3'
-                                                    : isElite && rank === 3
-                                                        ? 'border-[#A78BFA]/15 bg-[#A78BFA]/3'
-                                                        : 'border-white/5 bg-white/1 hover:border-white/10 hover:bg-white/3'
+                                            ? 'border-[#FF7100]/40 bg-orange-50/40'
+                                            : isElite
+                                                ? `${user._badgeBg} bg-opacity-30`
+                                                : 'border-slate-200 bg-white hover:border-slate-300'
                                         }`}
-                                    style={isCurrentUser ? { boxShadow: '0 0 16px rgba(198,255,26,0.08)' }
-                                        : isElite ? { boxShadow: `0 0 12px ${user._badgeColor}18` } : {}}
                                 >
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-4">
                                         {/* Rank badge */}
                                         <RankBadge rank={rank} />
 
-                                        {/* Address + level */}
+                                        {/* Address + details */}
                                         <div className="flex-1 min-w-0">
-                                            <div className="flex items-center gap-2 flex-wrap">
-                                                <span className={`font-bold font-mono text-sm truncate ${isCurrentUser ? 'text-[#C6FF1A]' : 'text-white/80'}`}>
+                                            <div className="flex items-center gap-2 flex-wrap mb-1">
+                                                <span className={`font-extrabold font-mono text-[15px] truncate ${isCurrentUser ? 'text-[#FF7100]' : 'text-slate-800'}`}>
                                                     {truncAddr(user.wallet_address)}
                                                 </span>
                                                 {isCurrentUser && (
-                                                    <span className="shrink-0 px-1.5 py-0.5 rounded-md bg-[#C6FF1A] text-black text-[9px] font-black uppercase tracking-wider">
+                                                    <span className="shrink-0 px-2 py-0.5 rounded-md bg-[#FF7100] text-white text-[9px] font-black uppercase tracking-wider shadow-sm">
                                                         You
                                                     </span>
                                                 )}
-                                                {/* Elite badge replaces generic Leader badge */}
                                                 {isElite && (
                                                     <span
-                                                        className="shrink-0 px-1.5 py-0.5 rounded-md border text-[9px] font-bold"
+                                                        className="shrink-0 px-2 py-0.5 rounded-md border text-[9px] font-bold flex items-center gap-1 shadow-sm"
                                                         style={{
                                                             color: user._badgeColor,
                                                             borderColor: `${user._badgeColor}40`,
-                                                            background: `${user._badgeColor}12`,
+                                                            background: `${user._badgeColor}15`,
                                                         }}
                                                     >
-                                                        {user._badge}
+                                                        {EliteIcon && <EliteIcon />} {user._badge}
                                                     </span>
                                                 )}
                                                 {!isElite && rank === 1 && (
-                                                    <span className="shrink-0 px-1.5 py-0.5 rounded-md bg-[#FBBF24]/15 border border-[#FBBF24]/30 text-[#FBBF24] text-[9px] font-bold">
-                                                        🔥 Leader
+                                                    <span className="shrink-0 px-2 py-0.5 rounded-md bg-amber-50 border border-amber-200 text-amber-600 text-[9px] font-bold flex items-center gap-1 shadow-sm">
+                                                        <RiFireFill /> Leader
                                                     </span>
                                                 )}
                                             </div>
-                                            <div className="flex items-center gap-2 mt-1">
-                                                {/* Level pill */}
+                                            <div className="flex items-center gap-3 mt-1.5">
                                                 <span
-                                                    className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md border text-[9px] font-semibold ${lvlStyle.bg} ${lvlStyle.border}`}
+                                                    className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md border text-[10px] font-bold shadow-sm ${lvlStyle.bg} ${lvlStyle.border}`}
                                                     style={{ color: lvlStyle.color }}
                                                 >
-                                                    {lvlStyle.icon} Lv.{levelInfo.level}
+                                                    <LevelIcon className="text-xs" /> Lv.{levelInfo.level}
                                                 </span>
-                                                <span className="text-white/20 text-[10px]">·</span>
-                                                <span className="text-white/30 text-[10px]">{user.total_contributions || 0} tasks</span>
+                                                <div className="w-1 h-1 rounded-full bg-slate-200" />
+                                                <span className="text-slate-500 text-[11px] font-semibold">{user.total_contributions || 0} tasks completed</span>
                                             </div>
-                                            {/* Score bar */}
                                             <ScoreBar score={user.reputation_score || 0} maxScore={maxScore} />
                                         </div>
 
                                         {/* Score */}
-                                        <div className="text-right shrink-0">
+                                        <div className="text-right shrink-0 border-l border-slate-100 pl-4 ml-2">
                                             <div
-                                                className="font-black text-base leading-none"
-                                                style={{ color: isCurrentUser ? '#C6FF1A' : isElite ? user._badgeColor : 'white' }}
+                                                className="font-semibold text-xl leading-none"
+                                                style={{ color: isCurrentUser ? '#FF7100' : isElite ? user._badgeColor : '#1E293B' }}
                                             >
                                                 {formatNum(user.reputation_score || 0)}
                                             </div>
-                                            <div className="text-white/25 text-[9px] font-semibold uppercase tracking-wider mt-0.5">pts</div>
+                                            <div className="text-slate-400 text-[9px] font-semibold mt-1.5">points</div>
                                         </div>
                                     </div>
                                 </motion.div>
-                            </>
+                            </div>
                         )
                     }) : (
                         <motion.div
@@ -386,11 +382,11 @@ export default function LeaderboardTable({ currentUserAddress }) {
                             animate={{ opacity: 1 }}
                             className="text-center py-12"
                         >
-                            <div className="w-14 h-14 rounded-2xl bg-white/3 border border-white/8 flex items-center justify-center mx-auto mb-3">
-                                <RiTrophyLine className="text-white/20 text-2xl" />
+                            <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center mx-auto mb-4 shadow-sm">
+                                <RiTrophyLine className="text-slate-300 text-3xl" />
                             </div>
-                            <p className="text-white/40 font-medium text-sm">No contributors yet</p>
-                            <p className="text-white/20 text-xs mt-1">Be the first to climb the ranks!</p>
+                            <p className="text-slate-800 font-extrabold text-base">No contributors yet</p>
+                            <p className="text-slate-500 text-sm font-medium mt-1">Be the first to climb the ranks!</p>
                         </motion.div>
                     )}
                 </AnimatePresence >
@@ -400,26 +396,39 @@ export default function LeaderboardTable({ currentUserAddress }) {
                     users.length > showCount && (
                         <button
                             onClick={() => setShowCount(c => c + 10)}
-                            className="w-full py-2.5 rounded-xl border border-white/8 bg-white/2 text-white/40 hover:text-white/70 hover:border-white/15 text-xs font-semibold transition-all mt-2"
+                            className="w-full py-3.5 rounded-2xl border border-slate-200 bg-slate-50 text-slate-500 hover:text-slate-800 hover:bg-slate-100 text-xs font-bold transition-all mt-4 shadow-sm"
                         >
-                            Show more ({allUsers.length - (showCount + ELITE_USERS.length)} remaining)
+                            Load More Rankings ({allUsers.length - (showCount + ELITE_USERS.length)} remaining)
                         </button>
                     )
                 }
             </div>
 
             {/* ── Footer ── */}
-            <div className="px-5 py-3 border-t border-white/6 flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-white/20 text-[10px]">
-                    <RiSparklingLine className="text-[#C6FF1A]/40 text-xs" />
-                    <span>Updated in real-time · BSC Mainnet</span>
+            <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between shrink-0">
+                <div className="flex items-center gap-2 text-slate-500 text-[11px] font-semibold">
+                    <RiSparklingLine className="text-[#FF7100] text-sm" />
+                    <span>Real-time · BSC Mainnet</span>
                 </div>
                 {user_rank && (
-                    <span className="text-white/25 text-[10px]">
+                    <span className="text-slate-600 text-[11px] font-bold">
                         Rank #{formatNum(user_rank)} of {formatNum(total_users)}
                     </span>
                 )}
             </div>
+
+            <style jsx>{`
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background-color: #E2E8F0;
+                    border-radius: 10px;
+                }
+            `}</style>
         </div>
     )
 }
