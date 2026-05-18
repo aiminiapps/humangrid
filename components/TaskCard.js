@@ -82,7 +82,7 @@ export default function TaskCard({ task, userAddress, userLevel, onComplete }) {
                                 {task.difficulty.toUpperCase()}
                             </span>
                             <span className="text-neon font-bold flex items-center gap-1 drop-shadow-sm">
-                                <RiCoinLine /> +{task.base_reward} SYNTR
+                                <RiCoinLine /> +{task.base_reward} HGAI
                             </span>
                         </div>
                         <h3 className="text-xl font-bold mb-2 text-gray-primary group-hover:text-neon transition-colors">{task.title}</h3>

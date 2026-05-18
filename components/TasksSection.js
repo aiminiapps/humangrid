@@ -122,7 +122,7 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
                         <p className="text-[#C6FF1A] font-semibold text-sm">Completed!</p>
                         <p className="text-white/40 text-xs">{task.title}</p>
                     </div>
-                    <div className="ml-auto text-[#C6FF1A] font-bold text-sm">+{task.base_reward} SYNTR</div>
+                    <div className="ml-auto text-[#C6FF1A] font-bold text-sm">+{task.base_reward} HGAI</div>
                 </div>
                 <AnimatePresence>{showReward && <RewardAnimation rewardData={rewardData} />}</AnimatePresence>
             </motion.div>
@@ -218,7 +218,7 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
                             <div className="flex items-center gap-1.5 bg-[#C6FF1A]/10 border border-[#C6FF1A]/25 rounded-xl px-3 py-2">
                                 <RiCoinLine className="text-[#C6FF1A] text-sm" />
                                 <span className="text-[#C6FF1A] font-black text-sm">+{task.base_reward}</span>
-                                <span className="text-[#C6FF1A]/60 text-xs font-medium">SYNTR</span>
+                                <span className="text-[#C6FF1A]/60 text-xs font-medium">HGAI</span>
                             </div>
                             {task.estimated_time && (
                                 <div className="flex items-center gap-1 text-white/30 text-xs">
@@ -318,7 +318,7 @@ function TaskItem({ task, userAddress, userLevel, onComplete, index }) {
                                         ) : (
                                             <>
                                                 <RiSparklingLine />
-                                                Submit & Earn {task.base_reward} SYNTR
+                                                Submit & Earn {task.base_reward} HGAI
                                             </>
                                         )}
                                     </motion.button>
@@ -429,7 +429,7 @@ export default function TasksSection({ tasks = [], userAddress, userLevel, onTas
                         </span>
                     </h2>
                     <p className="text-white/40 text-sm mt-1">
-                        Earn up to <span className="text-[#C6FF1A] font-bold">{totalPotential} SYNTR</span> from current selection
+                        Earn up to <span className="text-[#C6FF1A] font-bold">{totalPotential} HGAI</span> from current selection
                     </p>
                 </div>
 
@@ -482,9 +482,9 @@ export default function TasksSection({ tasks = [], userAddress, userLevel, onTas
                                     onChange={e => setAiDifficulty(e.target.value)}
                                     className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-white/80 text-sm focus:outline-none focus:border-[#60A5FA]/40"
                                 >
-                                    <option value="easy" className="bg-[#0B0F0C]">Easy (10 SYNTR)</option>
-                                    <option value="medium" className="bg-[#0B0F0C]">Medium (30 SYNTR)</option>
-                                    <option value="hard" className="bg-[#0B0F0C]">Hard (50 SYNTR)</option>
+                                    <option value="easy" className="bg-[#0B0F0C]">Easy (10 HGAI)</option>
+                                    <option value="medium" className="bg-[#0B0F0C]">Medium (30 HGAI)</option>
+                                    <option value="hard" className="bg-[#0B0F0C]">Hard (50 HGAI)</option>
                                 </select>
                             </div>
 

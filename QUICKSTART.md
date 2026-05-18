@@ -10,7 +10,7 @@ The "Connect Wallet" button doesn't show the WalletConnect modal because you nee
 1. Go to **https://cloud.walletconnect.com**
 2. Click **"Sign Up"** (or Sign In if you have an account)
 3. Click **"Create New Project"**
-4. Give it a name: **"SYNTHOS"**
+4. Give it a name: **"HumanGrid"**
 5. Click **"Create"**
 6. Copy your **Project ID** (looks like: `a1b2c3d4e5f6g7h8i9j0...`)
 

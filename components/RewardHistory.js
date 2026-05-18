@@ -111,7 +111,7 @@ function RewardRow({ reward, index }) {
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                         <span className="text-[#C6FF1A] font-black text-base">+{reward.amount}</span>
-                        <span className="text-white/40 text-xs font-medium">SYNTR</span>
+                        <span className="text-white/40 text-xs font-medium">HGAI</span>
                         {reward.ai_powered && (
                             <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-[#60A5FA]/10 border border-[#60A5FA]/20 text-[#60A5FA] text-[10px] font-semibold">
                                 <RiSparklingLine className="text-[9px]" />
@@ -171,7 +171,7 @@ function RewardRow({ reward, index }) {
                         {/* Amount detail */}
                         <div className="flex items-center justify-between">
                             <span className="text-white/30 text-xs font-semibold uppercase tracking-wider">Amount</span>
-                            <span className="text-[#C6FF1A] font-bold text-sm">{reward.amount} SYNTR</span>
+                            <span className="text-[#C6FF1A] font-bold text-sm">{reward.amount} HGAI</span>
                         </div>
 
                         {/* Date */}
@@ -292,7 +292,7 @@ export default function RewardHistory({ userAddress }) {
                 <div className="grid grid-cols-3 gap-3">
                     <div className="rounded-xl bg-[#C6FF1A]/8 border border-[#C6FF1A]/15 p-3 text-center">
                         <div className="text-[#C6FF1A] font-black text-lg leading-none">{totalEarned}</div>
-                        <div className="text-white/30 text-[10px] font-semibold uppercase tracking-wider mt-1">Total SYNTR</div>
+                        <div className="text-white/30 text-[10px] font-semibold uppercase tracking-wider mt-1">Total HGAI</div>
                     </div>
                     <div className="rounded-xl bg-[#34D399]/8 border border-[#34D399]/15 p-3 text-center">
                         <div className="text-[#34D399] font-black text-lg leading-none">{confirmedCount}</div>
@@ -339,7 +339,7 @@ export default function RewardHistory({ userAddress }) {
                                 <RiCoinLine className="text-white/20 text-2xl" />
                             </div>
                             <p className="text-white/40 font-medium text-sm">No rewards yet</p>
-                            <p className="text-white/20 text-xs mt-1">Complete tasks to start earning SYNTR</p>
+                            <p className="text-white/20 text-xs mt-1">Complete tasks to start earning HGAI</p>
                         </motion.div>
                     )}
                 </AnimatePresence>

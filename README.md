@@ -1,8 +1,8 @@
-# SYNTHOS
+# HumanGrid
 
 > Web3 AI Training & Reward Platform
 
-SYNTHOS is a decentralized platform where users train AI systems by completing micro-tasks and earn crypto rewards. Built with Next.js, WalletConnect, and Supabase.
+HumanGrid is a decentralized platform where users train AI systems by completing micro-tasks and earn crypto rewards. Built with Next.js, WalletConnect, and Supabase.
 
 ## 🌟 Features
 
@@ -74,7 +74,7 @@ NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your-project-id
 ## 🏗️ Project Structure
 
 ```
-synthos/
+humangrid/
 ├── app/
 │   ├── api/              # Backend API routes
 │   ├── ai/              # AI dashboard page
@@ -148,5 +148,5 @@ MIT License
 
 ---
 
-Built with 💚 by the SYNTHOS team
-# Synthos
+Built with 💚 by the HumanGrid team
+# HumanGrid

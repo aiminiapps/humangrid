@@ -50,7 +50,7 @@ export default function RewardAnimation({ rewardData }) {
                     </div>
                     <div className="flex items-center justify-center gap-2 text-neon">
                         <RiCoinLine className="text-xl animate-bounce" />
-                        <span className="text-2xl font-bold">+{rewardData?.amount} SYNTR</span>
+                        <span className="text-2xl font-bold">+{rewardData?.amount} HGAI</span>
                     </div>
                 </motion.div>
 

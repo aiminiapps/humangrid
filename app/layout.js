@@ -1,25 +1,25 @@
 import { Web3Provider } from '@/components/Web3Provider'
 import './globals.css'
 
-const DOMAIN = 'https://www.synthos.world'
-const TITLE = 'SYNTHOS — Train AI. Earn Crypto.'
-const DESCRIPTION = 'Complete AI training tasks and earn SYNTR tokens instantly on BNB Chain. Non-custodial, no KYC, real on-chain rewards.'
+const DOMAIN = 'https://www.humangrid.ai'
+const TITLE = 'HumanGrid AI — Decentralized AI Training Data Platform'
+const DESCRIPTION = 'Community-powered AI data labeling, verification, and reward ecosystem. Participate in the Label-to-Earn AI Data Network and earn HGAI tokens.'
 
 export const metadata = {
     metadataBase: new URL(DOMAIN),
     title: {
         default: TITLE,
-        template: '%s | SYNTHOS',
+        template: '%s | HumanGrid',
     },
     description: DESCRIPTION,
     keywords: [
-        'AI training', 'earn crypto', 'Web3', 'BNB Chain', 'SYNTR',
+        'AI training', 'earn crypto', 'Web3', 'BNB Chain', 'HGAI',
         'data labeling', 'crypto rewards', 'non-custodial', 'earn tokens',
         'AI tasks', 'blockchain', 'DeFi', 'earn online',
     ],
-    authors: [{ name: 'SYNTHOS', url: DOMAIN }],
-    creator: 'SYNTHOS',
-    publisher: 'SYNTHOS',
+    authors: [{ name: 'HumanGrid', url: DOMAIN }],
+    creator: 'HumanGrid',
+    publisher: 'HumanGrid',
     robots: {
         index: true,
         follow: true,
@@ -36,7 +36,7 @@ export const metadata = {
         type: 'website',
         locale: 'en_US',
         url: DOMAIN,
-        siteName: 'SYNTHOS',
+        siteName: 'HumanGrid',
         title: TITLE,
         description: DESCRIPTION,
         images: [
@@ -44,7 +44,7 @@ export const metadata = {
                 url: `${DOMAIN}/og.png`,
                 width: 1200,
                 height: 630,
-                alt: 'SYNTHOS — Train AI. Earn Crypto.',
+                alt: 'HumanGrid — Train AI. Earn Crypto.',
                 type: 'image/png',
             },
         ],
@@ -52,8 +52,8 @@ export const metadata = {
     // ── Twitter / X Card
     twitter: {
         card: 'summary_large_image',
-        site: '@synthos_world',
-        creator: '@synthos_world',
+        site: '@humangrid_world',
+        creator: '@humangrid_world',
         title: TITLE,
         description: DESCRIPTION,
         images: [`${DOMAIN}/og.png`],

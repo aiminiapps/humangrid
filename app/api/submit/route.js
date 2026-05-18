@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { calculateReward, TASK_POINTS } from '@/lib/reputation'
 import { validateTaskWithAI, generateAIFeedback, getAIProcessingMessage } from '@/lib/openrouter'
-import { sendSYNTRReward } from '@/lib/tokenReward'
+import { sendHGAIReward } from '@/lib/tokenReward'
 import { getTaskById } from '@/data/mockTasks'
 
 export async function POST(request) {
@@ -50,7 +50,7 @@ export async function POST(request) {
         const reputationPoints = TASK_POINTS[task.difficulty] || 10
 
         console.log(`💸 Sending ${rewardAmount} HGAI to ${userAddress}...`)
-        const transferResult = await sendSYNTRReward(userAddress, rewardAmount)
+        const transferResult = await sendHGAIReward(userAddress, rewardAmount)
 
         const txHash = transferResult.success
             ? transferResult.txHash

@@ -6,8 +6,8 @@ const openai = new OpenAI({
     baseURL: 'https://openrouter.ai/api/v1',
     apiKey: process.env.OPENROUTER_API_KEY,
     defaultHeaders: {
-        'HTTP-Referer': 'https://synthos.ai',
-        'X-Title': 'SYNTHOS AI Training Platform',
+        'HTTP-Referer': 'https://humangrid.ai',
+        'X-Title': 'HumanGrid AI Training Platform',
     },
 })
 
@@ -41,7 +41,7 @@ export async function POST(request) {
         const reward = REWARD_BY_DIFFICULTY[difficulty] || 30
         const timeEst = TIME_BY_DIFFICULTY[difficulty] || '2-4 min'
 
-        const prompt = `You are a task designer for SYNTHOS, a crypto AI training platform where users label data to train AI models and earn SYNTR tokens.
+        const prompt = `You are a task designer for HumanGrid, a crypto AI training platform where users label data to train AI models and earn HGAI tokens.
 
 Generate ${count} unique, realistic data labeling tasks for the "${category}" category at "${difficulty}" difficulty.
 

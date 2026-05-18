@@ -1,4 +1,4 @@
-# SYNTHOS - Setup Instructions
+# HumanGrid - Setup Instructions
 
 ## Prerequisites
 1. Node.js 18+ installed
@@ -10,7 +10,7 @@
 ### Create a New Project
 1. Go to https://supabase.com and sign in
 2. Click "New Project"
-3. Choose a name (e.g., "synthos-mvp")
+3. Choose a name (e.g., "humangrid-mvp")
 4. Set a strong database password
 5. Choose your region
 6. Wait for the project to be created
@@ -35,7 +35,7 @@
 1. Go to https://cloud.walletconnect.com
 2. Sign in or create an account
 3. Create a new project
-4. Name it "SYNTHOS"
+4. Name it "HumanGrid"
 5. Copy your Project ID
 
 ## Step 3: Environment Configuration
@@ -81,7 +81,7 @@ npm run dev
 ## Step 5: Test the Application
 
 1. Open http://localhost:3000
-2. You should see the SYNTHOS landing page
+2. You should see the HumanGrid landing page
 3. Click "Enter Dashboard" or "Connect Wallet"
 4. Connect your Web3 wallet (MetaMask, etc.)
 5. Navigate to the AI dashboard (/ai)

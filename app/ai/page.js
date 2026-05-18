@@ -170,9 +170,9 @@ export default function DashboardPage() {
 
     const stats = [
         {
-            label: 'SYNTR Balance',
+            label: 'HGAI Balance',
             value: userProfile?.total_rewards || 0,
-            suffix: 'SYNTR',
+            suffix: 'HGAI',
             icon: RiCoinLine,
             color: '#FF7100', // Sunrise Orange
             glow: 'shadow-[0_4px_15px_rgba(255,113,0,0.08)]',
