@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getServerSupabase } from '@/lib/supabase'
+import { prisma } from '@/lib/prisma'
 
 export async function GET(request) {
     try {
@@ -10,37 +10,22 @@ export async function GET(request) {
             return NextResponse.json({ error: 'Address required' }, { status: 400 })
         }
 
-        const supabase = getServerSupabase()
+        const walletAddress = address.toLowerCase()
 
-        // Check if user exists
-        let { data: user, error: fetchError } = await supabase
-            .from('users')
-            .select('*')
-            .eq('wallet_address', address.toLowerCase())
-            .single()
+        let user = await prisma.user.findUnique({
+            where: { wallet_address: walletAddress }
+        })
 
-        // If user doesn't exist, create them
-        if (fetchError || !user) {
-            const { data: newUser, error: createError } = await supabase
-                .from('users')
-                .insert([
-                    {
-                        wallet_address: address.toLowerCase(),
-                        reputation_score: 0,
-                        level: 1,
-                        total_contributions: 0,
-                        total_rewards: 0,
-                    },
-                ])
-                .select()
-                .single()
-
-            if (createError) {
-                console.error('Error creating user:', createError)
-                return NextResponse.json({ error: 'Failed to create user' }, { status: 500 })
-            }
-
-            user = newUser
+        if (!user) {
+            user = await prisma.user.create({
+                data: {
+                    wallet_address: walletAddress,
+                    reputation_score: 0,
+                    level: 1,
+                    total_contributions: 0,
+                    total_rewards: 0,
+                }
+            })
         }
 
         return NextResponse.json(user)

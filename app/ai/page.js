@@ -61,9 +61,9 @@ export default function DashboardPage() {
 
     if (!isConnected) {
         return (
-            <div className="min-h-screen bg-[#080C09] flex items-center justify-center">
+            <div className="min-h-screen bg-[#FAFAFC] flex items-center justify-center">
                 <div className="text-center">
-                    <p className="text-white/40 mb-4">Please connect your wallet to access the dashboard</p>
+                    <p className="text-slate-500 mb-4 font-medium">Please connect your wallet to access the dashboard</p>
                     <WalletButton />
                 </div>
             </div>
@@ -72,13 +72,13 @@ export default function DashboardPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#080C09]" style={{ backgroundImage: 'radial-gradient(ellipse at 20% 0%, rgba(198,255,26,0.04) 0%, transparent 60%)' }}>
+            <div className="min-h-screen bg-[#FAFAFC]" style={{ backgroundImage: 'radial-gradient(ellipse at 20% 0%, rgba(255,113,0,0.05) 0%, transparent 60%)' }}>
                 {/* Skeleton header */}
                 <header className="sticky top-0 z-50">
                     <div className="max-w-[1500px] mx-auto px-4 sm:px-6 pt-3 pb-1">
-                        <div className="flex items-center justify-between px-5 py-3 rounded-2xl border border-white/6 bg-white/2">
-                            <div className="h-8 w-32 rounded-xl bg-white/5 animate-pulse" />
-                            <div className="h-9 w-36 rounded-xl bg-white/5 animate-pulse" />
+                        <div className="flex items-center justify-between px-5 py-3 rounded-2xl border border-slate-200 bg-white/70 backdrop-blur-xl shadow-sm">
+                            <div className="h-8 w-32 rounded-xl bg-slate-200 animate-pulse" />
+                            <div className="h-9 w-36 rounded-xl bg-slate-200 animate-pulse" />
                         </div>
                     </div>
                 </header>
@@ -87,12 +87,12 @@ export default function DashboardPage() {
                     {/* Stat cards skeleton */}
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                         {[...Array(4)].map((_, i) => (
-                            <div key={i} className="rounded-2xl border border-white/6 bg-white/2 p-5" style={{ opacity: 1 - i * 0.15 }}>
+                            <div key={i} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" style={{ opacity: 1 - i * 0.15 }}>
                                 <div className="flex items-center justify-between mb-4">
-                                    <div className="h-3 w-20 rounded-full bg-white/8 animate-pulse" />
-                                    <div className="w-7 h-7 rounded-lg bg-white/8 animate-pulse" />
+                                    <div className="h-3 w-20 rounded-full bg-slate-200 animate-pulse" />
+                                    <div className="w-7 h-7 rounded-lg bg-slate-200 animate-pulse" />
                                 </div>
-                                <div className="h-7 w-24 rounded-lg bg-white/10 animate-pulse" />
+                                <div className="h-7 w-24 rounded-lg bg-slate-200 animate-pulse" />
                             </div>
                         ))}
                     </div>
@@ -103,30 +103,30 @@ export default function DashboardPage() {
                         <div className="xl:col-span-2 space-y-3">
                             {/* Header */}
                             <div className="flex justify-between items-center mb-4">
-                                <div className="h-7 w-40 rounded-xl bg-white/8 animate-pulse" />
-                                <div className="h-9 w-36 rounded-xl bg-white/6 animate-pulse" />
+                                <div className="h-7 w-40 rounded-xl bg-slate-200 animate-pulse" />
+                                <div className="h-9 w-36 rounded-xl bg-slate-200 animate-pulse" />
                             </div>
                             {/* Category tabs */}
                             <div className="flex gap-2 overflow-hidden">
                                 {[...Array(5)].map((_, i) => (
-                                    <div key={i} className="h-9 rounded-xl bg-white/5 animate-pulse shrink-0" style={{ width: 80 + i * 10 }} />
+                                    <div key={i} className="h-9 rounded-xl bg-slate-200 animate-pulse shrink-0" style={{ width: 80 + i * 10 }} />
                                 ))}
                             </div>
                             {/* Task rows */}
                             {[...Array(4)].map((_, i) => (
-                                <div key={i} className="rounded-2xl border border-white/6 bg-white/2 p-5" style={{ opacity: 1 - i * 0.2 }}>
+                                <div key={i} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" style={{ opacity: 1 - i * 0.2 }}>
                                     <div className="flex items-start justify-between gap-4">
                                         <div className="flex-1 space-y-3">
                                             <div className="flex gap-2">
-                                                <div className="h-5 w-14 rounded-lg bg-white/8 animate-pulse" />
-                                                <div className="h-5 w-20 rounded-lg bg-white/6 animate-pulse" />
+                                                <div className="h-5 w-14 rounded-lg bg-slate-200 animate-pulse" />
+                                                <div className="h-5 w-20 rounded-lg bg-slate-200 animate-pulse" />
                                             </div>
-                                            <div className="h-4 w-3/4 rounded-full bg-white/10 animate-pulse" />
-                                            <div className="h-3 w-full rounded-full bg-white/5 animate-pulse" />
-                                            <div className="h-3 w-2/3 rounded-full bg-white/5 animate-pulse" />
+                                            <div className="h-4 w-3/4 rounded-full bg-slate-200 animate-pulse" />
+                                            <div className="h-3 w-full rounded-full bg-slate-100 animate-pulse" />
+                                            <div className="h-3 w-2/3 rounded-full bg-slate-100 animate-pulse" />
                                         </div>
-                                        <div className="rounded-xl bg-white/6 px-4 py-3 text-center shrink-0 animate-pulse">
-                                            <div className="h-4 w-12 rounded bg-white/10" />
+                                        <div className="rounded-xl bg-slate-100 px-4 py-3 text-center shrink-0 animate-pulse">
+                                            <div className="h-4 w-12 rounded bg-slate-200" />
                                         </div>
                                     </div>
                                 </div>
@@ -136,14 +136,14 @@ export default function DashboardPage() {
                         {/* Right panel skeleton */}
                         <div className="space-y-4">
                             {[140, 200, 260].map((h, i) => (
-                                <div key={i} className="rounded-2xl border border-white/6 bg-white/2 p-5">
+                                <div key={i} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                                     <div className="flex items-center gap-2 mb-4">
-                                        <div className="w-8 h-8 rounded-xl bg-white/8 animate-pulse" />
-                                        <div className="h-4 w-28 rounded-full bg-white/8 animate-pulse" />
+                                        <div className="w-8 h-8 rounded-xl bg-slate-200 animate-pulse" />
+                                        <div className="h-4 w-28 rounded-full bg-slate-200 animate-pulse" />
                                     </div>
                                     <div className="space-y-3">
                                         {[...Array(3)].map((_, j) => (
-                                            <div key={j} className="h-10 rounded-xl bg-white/4 animate-pulse" style={{ opacity: 1 - j * 0.2 }} />
+                                            <div key={j} className="h-10 rounded-xl bg-slate-100 animate-pulse" style={{ opacity: 1 - j * 0.2 }} />
                                         ))}
                                     </div>
                                 </div>
@@ -152,16 +152,16 @@ export default function DashboardPage() {
                     </div>
                 </div>
 
-                {/* Shimmer overlay */}
+                {/* Shimmer overlay for light mode */}
                 <style>{`
                     @keyframes shimmer {
                         0% { background-position: -200% 0; }
                         100% { background-position: 200% 0; }
                     }
                     .animate-pulse {
-                        background-image: linear-gradient(90deg, transparent 25%, rgba(255,255,255,0.04) 50%, transparent 75%);
+                        background-image: linear-gradient(90deg, transparent 25%, rgba(255,255,255,0.6) 50%, transparent 75%);
                         background-size: 200% 100%;
-                        animation: shimmer 1.8s infinite;
+                        animation: shimmer 2s infinite;
                     }
                 `}</style>
             </div>
@@ -174,45 +174,45 @@ export default function DashboardPage() {
             value: userProfile?.total_rewards || 0,
             suffix: 'SYNTR',
             icon: RiCoinLine,
-            color: '#C6FF1A',
-            glow: 'shadow-[0_0_20px_rgba(198,255,26,0.15)]',
-            border: 'border-[#C6FF1A]/20',
-            bg: 'bg-gradient-to-br from-[#C6FF1A]/10 to-[#C6FF1A]/3',
+            color: '#FF7100', // Sunrise Orange
+            glow: 'shadow-[0_4px_15px_rgba(255,113,0,0.08)]',
+            border: 'border-[#FF7100]/20',
+            bg: 'bg-gradient-to-br from-[#FF7100]/10 to-[#FF7100]/5',
         },
         {
             label: 'Contributions',
             value: userProfile?.total_contributions || 0,
             suffix: 'tasks',
             icon: RiBriefcaseLine,
-            color: '#34D399',
-            glow: '',
-            border: 'border-white/8',
-            bg: 'bg-white/3',
+            color: '#10B981', // Emerald
+            glow: 'shadow-sm',
+            border: 'border-slate-200',
+            bg: 'bg-white',
         },
         {
             label: 'Level',
             value: userProfile?.level || 1,
             suffix: '',
             icon: RiTrophyLine,
-            color: '#FBBF24',
-            glow: '',
-            border: 'border-white/8',
-            bg: 'bg-white/3',
+            color: '#F59E0B', // Amber
+            glow: 'shadow-sm',
+            border: 'border-slate-200',
+            bg: 'bg-white',
         },
         {
             label: 'Reputation',
             value: userProfile?.reputation_score || 0,
             suffix: 'pts',
             icon: RiFlashlightLine,
-            color: '#60A5FA',
-            glow: '',
-            border: 'border-white/8',
-            bg: 'bg-white/3',
+            color: '#3B82F6', // Blue
+            glow: 'shadow-sm',
+            border: 'border-slate-200',
+            bg: 'bg-white',
         },
     ]
 
     return (
-        <div className="min-h-screen bg-[#080C09]" style={{ backgroundImage: 'radial-gradient(ellipse at 20% 0%, rgba(198,255,26,0.04) 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, rgba(96,165,250,0.03) 0%, transparent 60%)' }}>
+        <div className="min-h-screen bg-[#FAFAFC]" style={{ backgroundImage: 'radial-gradient(ellipse at 20% 0%, rgba(255,113,0,0.05) 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, rgba(59,130,246,0.03) 0%, transparent 60%)' }}>
 
             {/* ── Header ── */}
             <header className="sticky top-0 z-50">
@@ -224,10 +224,10 @@ export default function DashboardPage() {
                         transition={{ duration: 0.4, ease: 'easeOut' }}
                         className="flex items-center justify-between gap-4 px-4 sm:px-5 py-3 rounded-2xl border"
                         style={{
-                            background: 'rgba(8,12,9,0.85)',
-                            borderColor: 'rgba(255,255,255,0.08)',
+                            background: 'rgba(255, 255, 255, 0.85)',
+                            borderColor: 'rgba(15, 23, 42, 0.08)',
                             backdropFilter: 'blur(24px)',
-                            boxShadow: '0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(198,255,26,0.04), inset 0 1px 0 rgba(255,255,255,0.04)',
+                            boxShadow: '0 4px 20px -5px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,1)',
                         }}
                     >
                         {/* ── Logo ── */}
@@ -236,7 +236,8 @@ export default function DashboardPage() {
                             onClick={() => router.push('/')}
                             className="flex items-center gap-2.5 cursor-pointer group shrink-0"
                         >
-                            <Image src="/logo.png" alt="Logo" width={150} height={70} />
+                            {/* Assuming logo.png is adapted for light mode or you have a light-mode version */}
+                            <Image src="/logo.png" alt="Logo" width={120} height={50} className="object-contain" />
                         </motion.div>
 
                         {/* ── Center nav ── */}
@@ -248,11 +249,11 @@ export default function DashboardPage() {
                                 <button
                                     key={item.label}
                                     onClick={() => router.push(item.path)}
-                                    className="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all"
+                                    className="px-4 py-1.5 rounded-full text-xs font-bold transition-all uppercase tracking-wider"
                                     style={{
-                                        color: item.active ? '#C6FF1A' : 'rgba(255,255,255,0.4)',
-                                        background: item.active ? 'rgba(198,255,26,0.08)' : 'transparent',
-                                        border: item.active ? '1px solid rgba(198,255,26,0.2)' : '1px solid transparent',
+                                        color: item.active ? '#FF7100' : '#64748B', // Orange vs Slate-500
+                                        background: item.active ? 'rgba(255,113,0,0.08)' : 'transparent',
+                                        border: item.active ? '1px solid rgba(255,113,0,0.2)' : '1px solid transparent',
                                     }}
                                 >
                                     {item.label}
@@ -261,20 +262,20 @@ export default function DashboardPage() {
                         </nav>
 
                         {/* ── Right side ── */}
-                        <div className="flex items-center gap-2.5 shrink-0">
+                        <div className="flex items-center gap-3 shrink-0">
                             {/* BSC live badge */}
                             <div
-                                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border"
+                                className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border shadow-sm"
                                 style={{
-                                    borderColor: 'rgba(52,211,153,0.2)',
-                                    background: 'rgba(52,211,153,0.06)',
+                                    borderColor: 'rgba(16, 185, 129, 0.2)',
+                                    background: 'rgba(16, 185, 129, 0.05)',
                                 }}
                             >
-                                <span className="relative flex h-1.5 w-1.5 shrink-0">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34D399] opacity-60" />
-                                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#34D399]" />
+                                <span className="relative flex h-2 w-2 shrink-0">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-60" />
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10B981]" />
                                 </span>
-                                <span className="text-[#34D399] text-[10px] font-bold uppercase tracking-wider">BSC</span>
+                                <span className="text-[#10B981] text-[10px] font-bold uppercase tracking-widest">BSC Live</span>
                             </div>
 
                             {/* Wallet button */}
@@ -299,14 +300,14 @@ export default function DashboardPage() {
                             className={`rounded-2xl border p-5 ${stat.border} ${stat.bg} ${stat.glow}`}
                         >
                             <div className="flex items-center justify-between mb-3">
-                                <span className="text-white/40 text-xs font-semibold uppercase tracking-wider">{stat.label}</span>
-                                <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${stat.color}15` }}>
-                                    <stat.icon style={{ color: stat.color }} className="text-sm" />
+                                <span className="text-slate-500 text-xs font-bold uppercase tracking-wider">{stat.label}</span>
+                                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: `${stat.color}15` }}>
+                                    <stat.icon style={{ color: stat.color }} className="text-lg" />
                                 </div>
                             </div>
                             <div className="flex items-end gap-1.5">
-                                <span className="text-2xl font-black text-white">{stat.value.toLocaleString()}</span>
-                                {stat.suffix && <span className="text-white/30 text-sm font-medium mb-0.5">{stat.suffix}</span>}
+                                <span className="text-3xl font-extrabold text-slate-900 tracking-tight">{stat.value.toLocaleString()}</span>
+                                {stat.suffix && <span className="text-slate-400 text-sm font-medium mb-1">{stat.suffix}</span>}
                             </div>
                         </motion.div>
                     ))}
@@ -332,22 +333,24 @@ export default function DashboardPage() {
                         <motion.div
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="rounded-2xl border border-white/8 bg-white/3 p-5"
+                            className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
                         >
-                            <div className="flex items-center gap-2 mb-4">
-                                <RiShieldCheckLine className="text-[#C6FF1A] text-lg" />
-                                <h3 className="text-white font-bold text-sm">Level Progress</h3>
-                                <span className="ml-auto text-[#C6FF1A] font-black text-lg">Lv.{userProfile?.level || 1}</span>
+                            <div className="flex items-center gap-2 mb-5">
+                                <div className="p-2 bg-[#FF7100]/10 rounded-lg">
+                                    <RiShieldCheckLine className="text-[#FF7100] text-xl" />
+                                </div>
+                                <h3 className="text-slate-900 font-bold text-base">Level Progress</h3>
+                                <span className="ml-auto text-[#FF7100] font-black text-xl">Lv.{userProfile?.level || 1}</span>
                             </div>
-                            <div className="w-full bg-white/5 rounded-full h-2 mb-2">
+                            <div className="w-full bg-slate-100 rounded-full h-2.5 mb-3 overflow-hidden shadow-inner">
                                 <motion.div
                                     initial={{ width: 0 }}
                                     animate={{ width: `${((userProfile?.reputation_score || 0) % 100)}%` }}
                                     transition={{ duration: 1, ease: 'easeOut' }}
-                                    className="h-2 rounded-full bg-gradient-to-r from-[#C6FF1A] to-[#A3E635]"
+                                    className="h-full rounded-full bg-gradient-to-r from-[#FF7100] to-[#FF9D4A]"
                                 />
                             </div>
-                            <div className="flex justify-between text-xs text-white/30">
+                            <div className="flex justify-between text-xs font-medium text-slate-500 uppercase tracking-wide">
                                 <span>{(userProfile?.reputation_score || 0) % 100} / 100 XP</span>
                                 <span>Next: Lv.{(userProfile?.level || 1) + 1}</span>
                             </div>

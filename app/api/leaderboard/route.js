@@ -1,45 +1,35 @@
 import { NextResponse } from 'next/server'
-import { getServerSupabase } from '@/lib/supabase'
+import { prisma } from '@/lib/prisma'
 
 export async function GET(request) {
     try {
-        const supabase = getServerSupabase()
         const { searchParams } = new URL(request.url)
         const userAddress = searchParams.get('address')
 
-        // Fetch top contributors ordered by reputation score
-        const { data: users, error } = await supabase
-            .from('users')
-            .select('*')
-            .order('reputation_score', { ascending: false })
-            .order('total_contributions', { ascending: false })
-            .limit(100)
+        const users = await prisma.user.findMany({
+            orderBy: [
+                { reputation_score: 'desc' },
+                { total_contributions: 'desc' }
+            ],
+            take: 100
+        })
 
-        if (error) {
-            console.error('Error fetching leaderboard:', error)
-            return NextResponse.json({ error: 'Failed to fetch leaderboard' }, { status: 500 })
-        }
+        const dbCount = await prisma.user.count()
 
-        // Get total user count for rank context
-        const { count: dbCount } = await supabase
-            .from('users')
-            .select('*', { count: 'exact', head: true })
+        const totalUsers = dbCount > 1000 ? dbCount : 60000 + Math.floor(Math.random() * 10000)
 
-        // Simulate a large community (60k–70k) — use real count if > 1000, else simulate
-        const totalUsers = dbCount && dbCount > 1000
-            ? dbCount
-            : 60000 + Math.floor(Math.random() * 10000)
-
-        // Find current user's rank if address provided
         let userRank = null
         if (userAddress) {
-            const { count: aboveCount } = await supabase
-                .from('users')
-                .select('*', { count: 'exact', head: true })
-                .filter('reputation_score', 'gt',
-                    users?.find(u => u.wallet_address?.toLowerCase() === userAddress.toLowerCase())?.reputation_score ?? 0
-                )
-            if (aboveCount !== null) userRank = aboveCount + 1
+            const currentUser = users.find(u => u.wallet_address?.toLowerCase() === userAddress.toLowerCase())
+            
+            if (currentUser) {
+                const aboveCount = await prisma.user.count({
+                    where: {
+                        reputation_score: { gt: currentUser.reputation_score }
+                    }
+                })
+                userRank = aboveCount + 1
+            }
         }
 
         return NextResponse.json({

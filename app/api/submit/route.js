@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getServerSupabase, supabase } from '@/lib/supabase'
+import { prisma } from '@/lib/prisma'
 import { calculateReward, TASK_POINTS } from '@/lib/reputation'
 import { validateTaskWithAI, generateAIFeedback, getAIProcessingMessage } from '@/lib/openrouter'
 import { sendSYNTRReward } from '@/lib/tokenReward'
@@ -7,27 +7,21 @@ import { getTaskById } from '@/data/mockTasks'
 
 export async function POST(request) {
     try {
-        // taskData is sent by client for AI-generated tasks not in the DB/mockTasks
         const { taskId, answer, userAddress, taskData: inlineTaskData } = await request.json()
 
         if (!taskId || !answer || !userAddress) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
         }
 
-        // Get task: DB → mockTasks → inline (for AI-generated tasks)
         let task = null
         let useMockData = false
 
         try {
-            const { data: dbTask, error: taskError } = await supabase
-                .from('tasks')
-                .select('*')
-                .eq('id', taskId)
-                .single()
+            task = await prisma.task.findUnique({
+                where: { id: taskId }
+            })
 
-            if (!taskError && dbTask) {
-                task = dbTask
-            } else {
+            if (!task) {
                 task = getTaskById(taskId)
                 useMockData = true
             }
@@ -36,7 +30,6 @@ export async function POST(request) {
             useMockData = true
         }
 
-        // Fallback: use inline task data sent from client (AI-generated tasks)
         if (!task && inlineTaskData) {
             task = inlineTaskData
             useMockData = true
@@ -47,34 +40,28 @@ export async function POST(request) {
             return NextResponse.json({ error: 'Task not found' }, { status: 404 })
         }
 
-        // AI-POWERED VALIDATION
         console.log('🤖 AI validating submission...')
         const aiValidation = await validateTaskWithAI(task, answer)
 
-        // Calculate reward based on difficulty and AI confidence
         const baseReward = task.base_reward || task.reward || 10
         const confidenceMultiplier = aiValidation.confidence > 80 ? 1.0 : 0.8
         const rewardAmount = Math.floor(baseReward * confidenceMultiplier)
 
-        // Calculate reputation points
         const reputationPoints = TASK_POINTS[task.difficulty] || 10
 
-        // ─── REAL SYNTR TOKEN TRANSFER ─────────────────────────────────────────
-        console.log(`💸 Sending ${rewardAmount} SYNTR to ${userAddress}...`)
+        console.log(`💸 Sending ${rewardAmount} HGAI to ${userAddress}...`)
         const transferResult = await sendSYNTRReward(userAddress, rewardAmount)
 
         const txHash = transferResult.success
             ? transferResult.txHash
-            : `0x${Math.random().toString(16).substring(2, 66)}` // fallback mock hash if transfer fails
+            : `0x${Math.random().toString(16).substring(2, 66)}`
 
         if (transferResult.success) {
-            console.log(`✅ SYNTR transfer confirmed: ${txHash}`)
+            console.log(`✅ HGAI transfer confirmed: ${txHash}`)
         } else {
-            console.warn(`⚠️ SYNTR transfer failed (${transferResult.error}) — recording reward as pending`)
+            console.warn(`⚠️ HGAI transfer failed (${transferResult.error}) — recording reward as pending`)
         }
-        // ───────────────────────────────────────────────────────────────────────
 
-        // If using mock data, return response (with real tx if transfer succeeded)
         if (useMockData) {
             console.log('📦 Using mock submission (DB not connected)')
 
@@ -91,76 +78,54 @@ export async function POST(request) {
                     feedback: aiValidation.feedback,
                 },
                 message: transferResult.success
-                    ? `✨ ${rewardAmount} SYNTR sent to your wallet!`
+                    ? `✨ ${rewardAmount} HGAI sent to your wallet!`
                     : '✨ AI-validated contribution accepted! Reward pending.',
                 processing_message: getAIProcessingMessage()
             })
         }
 
-        // REAL DATABASE FLOW
-        const serverSupabase = getServerSupabase()
+        // Real Database Flow using Prisma
+        const user = await prisma.user.findUnique({
+            where: { wallet_address: userAddress.toLowerCase() }
+        })
 
-        // Get user
-        const { data: user, error: userError } = await serverSupabase
-            .from('users')
-            .select('*')
-            .eq('wallet_address', userAddress.toLowerCase())
-            .single()
-
-        if (userError || !user) {
+        if (!user) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 })
         }
 
-        // Create submission record
-        const { data: submission, error: submissionError } = await serverSupabase
-            .from('submissions')
-            .insert([
-                {
-                    user_id: user.id,
-                    task_id: taskId,
-                    answer: { value: answer, ai_confidence: aiValidation.confidence, ai_feedback: aiValidation.feedback },
-                    reward_amount: rewardAmount,
-                    status: aiValidation.isValid ? 'validated' : 'pending_review',
-                },
-            ])
-            .select()
-            .single()
+        const submission = await prisma.submission.create({
+            data: {
+                user_id: user.id,
+                task_id: taskId,
+                answer: { value: answer, ai_confidence: aiValidation.confidence, ai_feedback: aiValidation.feedback },
+                reward_amount: rewardAmount,
+                status: aiValidation.isValid ? 'validated' : 'pending_review',
+            }
+        })
 
-        if (submissionError) {
-            console.error('Error creating submission:', submissionError)
-            return NextResponse.json({ error: 'Failed to create submission' }, { status: 500 })
-        }
-
-        // Update user stats
         const newReputationScore = user.reputation_score + reputationPoints
         const newLevel = Math.floor(newReputationScore / 100) + 1
 
-        await serverSupabase
-            .from('users')
-            .update({
+        await prisma.user.update({
+            where: { id: user.id },
+            data: {
                 reputation_score: newReputationScore,
                 level: newLevel,
                 total_contributions: user.total_contributions + 1,
-                total_rewards: parseFloat(user.total_rewards) + parseFloat(rewardAmount),
-            })
-            .eq('id', user.id)
+                total_rewards: Number(user.total_rewards || 0) + Number(rewardAmount),
+            }
+        })
 
-        // Create reward record with real tx hash
-        const { data: reward } = await serverSupabase
-            .from('rewards')
-            .insert([
-                {
-                    user_id: user.id,
-                    submission_id: submission.id,
-                    amount: rewardAmount,
-                    tx_hash: txHash,
-                    status: transferResult.success ? 'sent' : 'pending',
-                },
-            ])
-            .select()
-            .single()
+        await prisma.reward.create({
+            data: {
+                user_id: user.id,
+                submission_id: submission.id,
+                amount: rewardAmount,
+                tx_hash: txHash,
+                status: transferResult.success ? 'sent' : 'pending',
+            }
+        })
 
-        // Generate AI feedback
         const aiFeedback = await generateAIFeedback(task, answer, aiValidation.isValid)
 
         return NextResponse.json({
@@ -176,7 +141,7 @@ export async function POST(request) {
                 feedback: aiFeedback,
             },
             message: transferResult.success
-                ? `✨ ${rewardAmount} SYNTR sent to your wallet!`
+                ? `✨ ${rewardAmount} HGAI sent to your wallet!`
                 : '✨ AI-validated contribution accepted! Reward pending.',
             processing_message: getAIProcessingMessage()
         })
@@ -189,4 +154,3 @@ export async function POST(request) {
         }, { status: 500 })
     }
 }
-

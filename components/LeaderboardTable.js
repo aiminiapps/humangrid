@@ -187,8 +187,10 @@ export default function LeaderboardTable({ currentUserAddress }) {
             // Handle both old array format and new object format
             if (Array.isArray(json)) {
                 setData({ users: json, total_users: 65432, user_rank: null })
-            } else {
+            } else if (json && json.users) {
                 setData(json)
+            } else {
+                setData({ users: [], total_users: 0, user_rank: null })
             }
         } catch (err) {
             console.error('Error fetching leaderboard:', err)
@@ -200,7 +202,7 @@ export default function LeaderboardTable({ currentUserAddress }) {
 
     useEffect(() => { fetchLeaderboard() }, [fetchLeaderboard])
 
-    const { users, total_users, user_rank } = data
+    const { users = [], total_users, user_rank } = data
     // Merge elite users at top, then real users (skip any real user that matches elite address)
     const eliteAddrs = new Set(ELITE_USERS.map(e => e.wallet_address.toLowerCase()))
     const realUsers = users.filter(u => !eliteAddrs.has(u.wallet_address?.toLowerCase()))

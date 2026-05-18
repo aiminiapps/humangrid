@@ -70,14 +70,14 @@ export const metadata = {
     alternates: {
         canonical: DOMAIN,
     },
-    // ── Theme for mobile browser chrome
-    themeColor: '#060A07',
-    colorScheme: 'dark',
-    viewport: {
-        width: 'device-width',
-        initialScale: 1,
-        maximumScale: 1,
-    },
+}
+
+export const viewport = {
+    themeColor: '#FAFAFC',
+    colorScheme: 'light',
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
 }
 
 export default function RootLayout({ children }) {
