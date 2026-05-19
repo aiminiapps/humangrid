@@ -1,7 +1,7 @@
 import { Web3Provider } from '@/components/Web3Provider'
 import './globals.css'
 
-const DOMAIN = 'https://www.humangrid.ai'
+const DOMAIN = 'https://www.humangridai.xyz'
 const TITLE = 'HumanGrid AI — Decentralized AI Training Data Platform'
 const DESCRIPTION = 'Community-powered AI data labeling, verification, and reward ecosystem. Participate in the Label-to-Earn AI Data Network and earn HGAI tokens.'
 
@@ -52,8 +52,8 @@ export const metadata = {
     // ── Twitter / X Card
     twitter: {
         card: 'summary_large_image',
-        site: '@humangrid_world',
-        creator: '@humangrid_world',
+        site: '@humangridHGAI',
+        creator: '@humangridHGAI',
         title: TITLE,
         description: DESCRIPTION,
         images: [`${DOMAIN}/og.png`],

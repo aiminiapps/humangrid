@@ -6,9 +6,9 @@ import { RiTwitterXFill, RiBook2Line, RiExternalLinkLine } from 'react-icons/ri'
 
 export default function LandingFooter() {
     const FOOTER_LINKS = [
-        { label: 'Documentation', icon: RiBook2Line, href: '#' },
-        { label: 'X (Twitter)', icon: RiTwitterXFill, href: '#' },
-        { label: 'BSCScan', icon: RiExternalLinkLine, href: '#' },
+        { label: 'Documentation', icon: RiBook2Line, href: 'https://humangridai.gitbook.io/humangridai-docs' },
+        { label: 'X (Twitter)', icon: RiTwitterXFill, href: 'https://x.com/humangridHGAI' },
+        { label: 'Website', icon: RiExternalLinkLine, href: 'https://www.humangridai.xyz' },
     ]
 
     return (
