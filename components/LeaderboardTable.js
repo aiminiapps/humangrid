@@ -122,7 +122,7 @@ function UserRankBanner({ rank, totalUsers, score }) {
         <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`mx-6 mb-2 mt-5 rounded-2xl border overflow-hidden shadow-sm transition-all
+            className={`mx-6 mb-2 mt-5 h-[150px] rounded-2xl border overflow-hidden shadow-sm transition-all
                 ${isTop10 ? 'border-[#FF7100]/30 bg-orange-50/50' 
                 : isTop1k ? 'border-blue-200 bg-blue-50/50' 
                 : 'border-slate-200 bg-slate-50/50'}`}
