@@ -13,6 +13,7 @@
     "@prisma/client": "^6.19.3",
     "@supabase/supabase-js": "^2.95.3",
     "@tanstack/react-query": "^5.90.21",
+    "@walletconnect/ethereum-provider": "^2.23.9",
     "@web3modal/wagmi": "^5.1.11",
     "ethers": "^6.16.0",
     "framer-motion": "^12.34.0",
