@@ -8,7 +8,7 @@ export default function LandingFooter() {
     const FOOTER_LINKS = [
         { label: 'Documentation', icon: RiBook2Line, href: 'https://humangridai.gitbook.io/humangridai-docs' },
         { label: 'X (Twitter)', icon: RiTwitterXFill, href: 'https://x.com/humangridHGAI' },
-        { label: 'Website', icon: RiExternalLinkLine, href: 'https://www.humangridai.xyz' },
+        { label: 'Bscscan', icon: RiExternalLinkLine, href: 'https://bscscan.com/token/0x9d4bC6a61E5FDb807554b4696bFf6Dd9E77A978a#transactions' },
     ]
 
     return (
