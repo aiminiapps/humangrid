@@ -17,6 +17,9 @@ export async function POST(request) {
         let useMockData = false
 
         try {
+            if (!process.env.DATABASE_URL) {
+                throw new Error("DATABASE_URL not set");
+            }
             task = await prisma.task.findUnique({
                 where: { id: taskId }
             })

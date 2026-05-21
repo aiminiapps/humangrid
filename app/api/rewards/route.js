@@ -11,6 +11,14 @@ export async function GET(request) {
             where = { user: { wallet_address: address.toLowerCase() } }
         }
 
+        if (!process.env.DATABASE_URL) {
+            console.log('📦 Using mock rewards data (DATABASE_URL not set)')
+            return NextResponse.json([
+                { id: '1', amount: 50.0, status: 'confirmed', created_at: new Date().toISOString(), tx_hash: '0xmock123', users: { wallet_address: address || '0xmock' } },
+                { id: '2', amount: 12.5, status: 'pending', created_at: new Date().toISOString(), users: { wallet_address: address || '0xmock' } }
+            ])
+        }
+
         const rewards = await prisma.reward.findMany({
             where,
             include: { user: true },

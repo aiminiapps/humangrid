@@ -7,7 +7,7 @@ export async function GET(request) {
         const { searchParams } = new URL(request.url)
         const useMock = searchParams.get('mock') === 'true'
 
-        if (!useMock) {
+        if (!useMock && process.env.DATABASE_URL) {
             try {
                 const tasks = await prisma.task.findMany({
                     orderBy: { created_at: 'desc' }

@@ -12,6 +12,19 @@ export async function GET(request) {
 
         const walletAddress = address.toLowerCase()
 
+        if (!process.env.DATABASE_URL) {
+            console.log('📦 Using mock profile data (DATABASE_URL not set)')
+            return NextResponse.json({
+                id: 'mock-user-id',
+                wallet_address: walletAddress,
+                reputation_score: 150,
+                level: 2,
+                total_contributions: 5,
+                total_rewards: 25.5,
+                created_at: new Date().toISOString()
+            })
+        }
+
         let user = await prisma.user.findUnique({
             where: { wallet_address: walletAddress }
         })
