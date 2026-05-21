@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "prisma generate",
+    "postinstall": "DATABASE_URL=\"postgresql://mock\" DIRECT_URL=\"postgresql://mock\" prisma generate",
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "DATABASE_URL=\"postgresql://mock\" DIRECT_URL=\"postgresql://mock\" prisma generate && next build",
     "start": "next start",
     "lint": "next lint"
   },
